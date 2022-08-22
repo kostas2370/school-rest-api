@@ -6,10 +6,11 @@ from base.models import Student,subject,Grades,Classroom
 from .serializers import StudentSerializer,TeacherSerializer,ClassroomSerializer,GradesSerializer,SubjectSerializer
 from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view,permission_classes
+
 
 @api_view(['GET','POST','DELETE'])
-@permission_classes(IsAuthenticated)
+
 def students(request):
 	
 	if request.method=="GET":
@@ -32,7 +33,7 @@ def students(request):
 				students=Student.objects.filter(first_name=first_name)
 			else:
 				students=Student.objects.all()
-		
+				print(request.user.username)
 			
 			serializer=StudentSerializer(students,many=True)
 			return Response(serializer.data)
@@ -181,6 +182,7 @@ def grade(request):
 				grades = Grades.objects.all()
 		
 			serializer=GradesSerializer(grades,many=True)
+			
 			return Response(serializer.data)	
 
 	elif request.method=="POST":
@@ -245,7 +247,7 @@ def SSubject(request):
 				Subject = subject.objects.filter(subject_id=subject_id)					
 			else :
 				Subject = subject.objects.all()
-		 
+
 			serializer=SubjectSerializer(grades,many=True)
 			return Response(serializer.data)
 		

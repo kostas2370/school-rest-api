@@ -51,6 +51,7 @@ class subject(models.Model):
 	def __str__(self):
 		return f'{self.onoma}{self.taxh}'
 class Student(models.Model):
+	
 	first_name=models.CharField(max_length=100)
 	last_name=models.CharField(max_length=100)
 	taxh=models.ForeignKey(Classroom,on_delete=models.CASCADE)
