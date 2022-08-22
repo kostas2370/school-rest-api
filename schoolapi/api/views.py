@@ -225,10 +225,10 @@ def grade_update(request,id):
 def SSubject(request):
 	if request.method=="GET":
 			
-			teacher=request.query_params.get("teacher")
-			onoma=request.query_params.get("onoma")
-			taxh=request.query_params.get("taxh")
-			subject_id=request.query_params.get("subject_id")
+			teacher=request.query_params.get("teacher",None)
+			onoma=request.query_params.get("onoma",None)
+			taxh=request.query_params.get("taxh",None)
+			subject_id=request.query_params.get("subject_id",None)
 			if teacher  :
 				Subject = subject.objects.filter(teacher=teacher)
 				
