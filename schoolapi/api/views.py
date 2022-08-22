@@ -367,7 +367,7 @@ def teacher(request):
 
 	elif request.method=="POST":
 			data=request.data
-			new_user=User.objects.create(username =data["user"]["username"],password=data["user"]["password"])
+			new_user=User.objects.create(username =data["user"]["username"],password=data["user"]["password"],role=2)
 			if new_user:
 				new_user.save()
 		
