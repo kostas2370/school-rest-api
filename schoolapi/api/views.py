@@ -1,12 +1,15 @@
 from rest_framework.response import Response
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework.decorators import api_view
+
 from base.models import Student,subject,Grades,Classroom
 from .serializers import StudentSerializer,TeacherSerializer,ClassroomSerializer,GradesSerializer,SubjectSerializer
 from django.contrib.auth.models import User
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+
 @api_view(['GET','POST','DELETE'])
+@permission_classes(IsAuthenticated)
 def students(request):
 	
 	if request.method=="GET":
