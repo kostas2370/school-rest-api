@@ -1,7 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
-from PIL import Image
 
+from PIL import Image
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+
+	choices=((1,"school_manager"),(2,"school_teacher"),(3,"student"))
+	role = models.PositiveSmallIntegerField(choices=choices, blank=True, null=True)
 
 class Teacher(models.Model):
 	user=models.OneToOneField(User,on_delete=models.CASCADE)
@@ -51,7 +56,7 @@ class subject(models.Model):
 	def __str__(self):
 		return f'{self.onoma}{self.taxh}'
 class Student(models.Model):
-	
+	user=models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
 	first_name=models.CharField(max_length=100)
 	last_name=models.CharField(max_length=100)
 	taxh=models.ForeignKey(Classroom,on_delete=models.CASCADE)

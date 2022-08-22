@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'djoser',
 
 ]
+AUTH_USER_MODEL = 'base.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -46,6 +47,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'schoolapi.urls'
+
+
+
 
 TEMPLATES = [
     {
