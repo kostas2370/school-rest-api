@@ -85,17 +85,17 @@ def students(request):
 
 @api_view(['PUT'])
 def student_update(request,id=''):
-	if request.user.role==1:	
-		try:
-			student=Student.objects.get(student_id=id)
-			classs=student.taxh.id
+	if request.user.role!=2:
+		if request.user.role==1:	
+			try:
+				student=Student.objects.get(student_id=id)
+				classs=student.taxh.id
 			
-		except :
-			return JsonResponse({'message': ' Student not found'}, status=status.HTTP_404_NOT_FOUND)
-	elif request.user.role==3:
-		student=Student.objects.get(student_id=request.user.id)	
-		classs=student.taxh.id
-	if request.user.role!=2:	
+			except :
+		elif request.user.role==3:
+			student=Student.objects.get(student_id=request.user.id)	
+			classs=student.taxh.id	
+		
 		data=JSONParser().parse(request)
 		serializer=StudentSerializer(student,data=data)
 		if serializer.is_valid():
