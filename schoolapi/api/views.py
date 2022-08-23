@@ -243,27 +243,46 @@ def grade(request):
 		return Response(serializer.data)	
 
 	elif request.method=="POST":
-			serializer=GradesSerializer(data=request.data)
-			
-			if serializer.is_valid():			
-				
-				student=Student.objects.get(student_id=request.data["student"])
-				sub=subject.objects.get(subject_id=request.data["subject_name"])
-				if student.taxh==sub.taxh:
-						serializer.data["classroom"]=student.taxh
-						serializer.save()
-						return Response(serializer.data)
-				else:
-						return JsonResponse({"message":"This subject is not in student classroom"},status=status.HTTP_400_BAD_REQUEST)
-			return JsonResponse({"message":"This grade already exists"},status=status.HTTP_400_BAD_REQUEST)
+			if request.user.role==1:
+				serializer=GradesSerializer(data=request.data)
+				if serializer.is_valid():			
+					
+					student=Student.objects.get(student_id=request.data["student"])
+					sub=subject.objects.get(subject_id=request.data["subject_name"])
+					if student.taxh==sub.taxh:
+							serializer.data["classroom"]=student.taxh
+							serializer.save()
+							return Response(serializer.data)
+					else:
+							return JsonResponse({"message":"This subject is not in student classroom"},status=status.HTTP_400_BAD_REQUEST)
+				return JsonResponse({"message":"This grade already exists"},status=status.HTTP_400_BAD_REQUEST)
+			elif request.user.role==2:
+					subject=request.data['subject_name']
+					student=request.data['student']
+					teacher=Teacher.objects.get(user=request.user)
+					Subject=subject.objects.get(subject_id=request.data["subject"])
+					Student=Student.objects.get(student_id=request.data['id'])
+					try:
+						if Subject.taxh ==student.taxh and subject.teacher == teacher.teacher_id :
+							grades=Grades.objects.create(student=student.student_id,subject_name=Subject.subject_id,teacher=teacher.id,classroom=Subject.taxh,grade=request.data["grade"])
+						else :
+							return JsonResponse({"message":"No permissions"},status=status.HTTP_400_BAD_REQUEST)
+					except:
+							return JsonResponse({"message":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
+
+
+
 	elif request.method=="DELETE":
-			id=request.query_params.get("id",None)
-			try:
-				grades =Grades.objects.get(id=id)
-				grades.delete()
-				return JsonResponse({'message': ' Grades  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-			except:
-				return JsonResponse({'message' : 'Couldnts find Grades with that id'},status=status.HTTP_404_NOT_FOUND)	
+			if request.user.role==1:
+				id=request.query_params.get("id",None)
+				try:
+					grades =Grades.objects.get(id=id)
+					grades.delete()
+					return JsonResponse({'message': ' Grades  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+				except:
+					return JsonResponse({'message' : 'Couldnts find Grades with that id'},status=status.HTTP_404_NOT_FOUND)	
+			else:
+				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["PUT"])
