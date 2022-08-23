@@ -92,6 +92,7 @@ def student_update(request,id=''):
 				classs=student.taxh.id
 			
 			except :
+				return JsonResponse({'message': ' Student not found'}, status=status.HTTP_404_NOT_FOUND)
 		elif request.user.role==3:
 			student=Student.objects.get(student_id=request.user.id)	
 			classs=student.taxh.id	
