@@ -287,18 +287,19 @@ def grade(request):
 
 @api_view(["PUT"])
 def grade_update(request,id):
-	try:
-		grade=Grades.objects.get(id=id)
-	except:
-		return JsonResponse({'message' : 'Couldnt find a Grade with that id'},status=status.HTTP_404_NOT_FOUND)
-
-	data=JSONParser.parse(request.data)	
-	serializer=GradesSerializer.parse(grade,data=data)
-	if serializer.is_valid():
-		serializer.save()
-		return Response(serializer.data)
-
-	return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
+	if request.user.role==1:
+		try:
+			grade=Grades.objects.get(id=id)
+		except:
+			return JsonResponse({'message' : 'Couldnt find a Grade with that id'},status=status.HTTP_404_NOT_FOUND)
+	
+		data=JSONParser.parse(request.data)	
+		serializer=GradesSerializer.parse(grade,data=data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+	
+		return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
 
 	
 
