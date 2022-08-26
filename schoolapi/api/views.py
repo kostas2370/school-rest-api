@@ -305,63 +305,67 @@ def grade_update(request,id):
 
 @api_view(["GET","POST","DELETE"])
 def SSubject(request):
-	if request.method=="GET":
-			
-			teacher=request.query_params.get("teacher",None)
-			onoma=request.query_params.get("onoma",None)
-			taxh=request.query_params.get("taxh",None)
-			subject_id=request.query_params.get("subject_id",None)
-			if teacher  :
-				Subject = subject.objects.filter(teacher=teacher)
+	
+		if request.method=="GET":
 				
-			elif onoma  and taxh :
-				Subject = subject.objects.filter(onoma=onoma,taxh=taxh)	
-		
-			elif onoma  :
-				Subject = subject.objects.filter(onoma=onoma)	
+				teacher=request.query_params.get("teacher",None)
+				onoma=request.query_params.get("onoma",None)
+				taxh=request.query_params.get("taxh",None)
+				subject_id=request.query_params.get("subject_id",None)
+				if teacher  :
+					Subject = subject.objects.filter(teacher=teacher)
+					
+				elif onoma  and taxh :
+					Subject = subject.objects.filter(onoma=onoma,taxh=taxh)	
 			
-			elif subject_id :
-				Subject = subject.objects.filter(subject_id=subject_id)					
-			else :
-				Subject = subject.objects.all()
-
-			serializer=SubjectSerializer(grades,many=True)
-			return Response(serializer.data)
-		
-
-
-	elif request.method=="POST":
-			serializer=SubjectSerializer(data=request.data)
+				elif onoma  :
+					Subject = subject.objects.filter(onoma=onoma)	
+				
+				elif subject_id :
+					Subject = subject.objects.filter(subject_id=subject_id)					
+				else :
+					Subject = subject.objects.all()
+	
+				serializer=SubjectSerializer(grades,many=True)
+				return Response(serializer.data)
 			
-			if serializer.is_valid():			
-				serializer.save()
-			return Response(serializer.data)
+		
+		elif request.user.role==1: and request != "GET":
+			if request.method=="POST":
+					serializer=SubjectSerializer(data=request.data)
+					
+					if serializer.is_valid():			
+						serializer.save()
+					return Response(serializer.data)
+		
+		
+			elif request.method=="DELETE":
+					subject_id=request.query_params.get("subject_id",None)
+					try:
+						Subject =subject.objects.get(subject_id=subject_id)
+						Subject.delete()
+						return JsonResponse({'message': ' Subject  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+					except:
+						return JsonResponse({'message' : 'Couldnts find Subject with that id'},status=status.HTTP_404_NOT_FOUND)
+		else:
 
-
-	elif request.method=="DELETE":
-			subject_id=request.query_params.get("subject_id",None)
-			try:
-				Subject =subject.objects.get(subject_id=subject_id)
-				Subject.delete()
-				return JsonResponse({'message': ' Subject  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-			except:
-				return JsonResponse({'message' : 'Couldnts find Subject with that id'},status=status.HTTP_404_NOT_FOUND)
-
+			return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["PUT"])
 def subject_update(request,id):
-	try:
-		subj=subject.objects.get(subject_id=id)
-	except:
-		return JsonResponse({'message':'Subject not found'},status=status.HTTP_404_NOT_FOUND)
-
-	data=JSONParser.parsers(request.data)
-	serializer=SubjectSerializer(subj,data=data)
-	if serializer.is_valid():
-		serializer.save()
-		return Response(serializer.data)
-
-	return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
+	if request.user.role==1:
+		try:
+			subj=subject.objects.get(subject_id=id)
+		except:
+			return JsonResponse({'message':'Subject not found'},status=status.HTTP_404_NOT_FOUND)
+	
+		data=JSONParser.parsers(request.data)
+		serializer=SubjectSerializer(subj,data=data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+	
+		return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -388,11 +392,17 @@ def teacher(request):
 
 	elif request.method=="POST":
 			data=request.data
-			new_user=User.objects.create(username =data["user"]["username"],password=data["user"]["password"],role=2)
-			if new_user:
-				new_user.save()
-		
+			if request.user.role==2:
+				new_user=request.user
+			elif request.user.role==1:
+				new_user=data["user"]
+			else:
+				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+
+
 			new_Teacher=Teacher.objects.create(user=new_user,first_name=data["first_name"],last_name=data["last_name"],phone=data["phone"],email=data["email"])		
+			
+
 			if new_Teacher:
 				new_Teacher.save()
 		
@@ -400,7 +410,13 @@ def teacher(request):
 			return Response(serializer.data)
 	
 	elif request.method=="DELETE":
-			teacher_id=request.query_params.get("teacher_id",None)
+			if request.user.role==2:
+				teacher_id=Teacher.objects.get(user=request.user)
+			elif request.user.role==1:
+				teacher_id=request.query_params.get("teacher_id",None)
+			else:
+				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+
 			try:
 				teacher =Teacher.objects.get(teacher_id=teacher_id)
 				teacher.delete()
@@ -413,10 +429,15 @@ def teacher(request):
 
 @api_view(["PUT"])
 def teacher_update(request,id):
-	try:
-		teacher=Teacher.objects.get(teacher_id=id)
-	except:
-		return JsonResponse({'message':'Teacher not found'},status=status.HTTP_404_NOT_FOUND)
+	if request.user.role==1:
+		try:
+			teacher=Teacher.objects.get(teacher_id=id)
+		except:
+			return JsonResponse({'message':'Teacher not found'},status=status.HTTP_404_NOT_FOUND)
+	elif request.uer.role==2:
+		teacher=Teacher.objects.get(user=request.user)
+	else:
+		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
 	data=JSONParser.parsers(request.data)
 	serializer=TeacherSerializer(teacher,data=data)
