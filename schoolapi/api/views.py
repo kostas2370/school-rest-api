@@ -324,7 +324,7 @@ def SSubject(request):
 				else :
 					Subject = subject.objects.all()
 	
-				serializer=SubjectSerializer(grades,many=True)
+				serializer=SubjectSerializer(Subject,many=True)
 				return Response(serializer.data)
 			
 		
@@ -381,12 +381,12 @@ def teacher(request):
 				teacher = Teacher.objects.filter(first_name=first_name,last_name=last_name)
 				
 			elif teacher_id :
-						teacher = Teacher.objects.filter(teacher_id=teacher_id,last_name=last_name)
+				teacher = Teacher.objects.filter(teacher_id=teacher_id,last_name=last_name)
 			else :
-				teacher=teacher.objects.all()
+				teacher=Teacher.objects.all()
 		
 	
-			serializer=SubjectSerializer(teacher,many=True)
+			serializer=TeacherSerializer(teacher,many=True)
 			return Response(serializer.data)		
 
 
@@ -395,7 +395,8 @@ def teacher(request):
 			if request.user.role==2:
 				new_user=request.user
 			elif request.user.role==1:
-				new_user=data["user"]
+				user_id=data["user"]
+				new_user=User.objects.get(username=user_id)
 			else:
 				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
