@@ -10,9 +10,7 @@ from rest_framework.decorators import api_view,permission_classes
 
 
 @api_view(['GET','POST','DELETE'])
-
-def students(request):
-	print(request.user.role)	
+def students(request):	
 	if request.method=="GET":
 			if request.user.role==1 or request.user.role==2:
 				first_name = request.query_params.get("first_name",None)
@@ -330,7 +328,7 @@ def SSubject(request):
 				return Response(serializer.data)
 			
 		
-		elif request.user.role==1: and request != "GET":
+		elif request.user.role==1 and request.method != "GET":
 			if request.method=="POST":
 					serializer=SubjectSerializer(data=request.data)
 					
@@ -366,6 +364,8 @@ def subject_update(request,id):
 			return Response(serializer.data)
 	
 		return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
+	else:
+		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
 
 
