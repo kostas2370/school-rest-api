@@ -5,8 +5,28 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
 
-	choices=((1,"school_manager"),(2,"school_teacher"),(3,"student"))
+	choices=((1,"school_manager"),(2,"school_teacher"),(3,"student"),(4,'no_role'))
 	role = models.PositiveSmallIntegerField(choices=choices, blank=True, null=True)
+	class Meta:
+		permissions=(
+			('can_get_students','Get details of student'),
+			('can_post_students','Post students Data'),
+			('can_delete_students','Delete students'),
+			('can_update_student_data','Update student Data'),
+			('can_add_edit_delete_class','Full control over classes'),
+			('get_self_grades','student to get their grades'),
+			('get_teacher_grades','teachers on their own subject grades'),
+			('full_controll_over_grades','full control in grades'),
+			('post_grades','To post grades'),
+			('edit_grades','edit grades'),
+			('full_control_over_subjects','full control over subjects'),
+			('get_teacher_information','get teacher information'),
+			('full_control_over_teacher','full control over teachers'),
+			('can_delete_self_teacher','can Delete themselves from db'),
+			('can_edit_self_teacher','Change some data from themselves'),
+			('can_add_apousia','apousies')
+			
+			)
 
 class Teacher(models.Model):
 	user=models.OneToOneField(User,on_delete=models.CASCADE)

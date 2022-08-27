@@ -37,22 +37,37 @@ def students(request):
 				serializer=StudentSerializer(students,many=True)
 				return Response(serializer.data)
 			else: 
-				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+				students=Student.objects.get(user=request.user)
+				serializer=StudentSerializer(students)
+				return Response(serializer.data)
 	elif request.method=="POST":
-			if request.user.role==1 :
+			
 				data=request.data
+				if request.user.role==1 :
+					try:
+						user_id=request.data['user']
+						new_user=User.objects.get(username=user_id)
+					except:
+						return JsonResponse({'message':"You need to add user in ur json form"},status=status.HTTP_400_BAD_REQUEST)			
+				elif request.user.role ==4:
+					new_user=request.user
+					teacher=Teacher.objects.filter(user=new_user).count()
+					if teacher==0:
+						new_user.role=3
+						new_user.save()
+					else:
+						return JsonResponse({'message':"You already are a teacher"},status=status.HTTP_400_BAD_REQUEST)			
+				else:
+						return JsonResponse({'message':"You already are a studentr"},status=status.HTTP_400_BAD_REQUEST)			
+
+				taxh=Classroom.objects.get(id=data['classroom'])
 				try:
-					new_user=User.objects.create(username=data["user"]["username"],password=data["user"]["password"],role=3)
-				except:
-					return JsonResponse({'message':"You need to add user in ur json form"},status=status.HTTP_400_BAD_REQUEST)			
-				
-				try:
-					new_student=Student.objects.create(user=new_user,first_name=data["first_name"],last_name=data["last_name"],taxh=data["classroom"],phone=data["phone"],email=data["email"],apousies=0)
+					new_student=Student.objects.create(user=new_user,first_name=data["first_name"],last_name=data["last_name"],taxh=taxh,phone=data["phone"],email=data["email"],apousies=0)
 				except:
 					return JsonResponse({'message':"You need to fix the student information"},status=status.HTTP_400_BAD_REQUEST)	
 				
-				classroom=Classroom.objects.get(id=request.data["taxh"])
-				classroom.students_in=Student.objects.filter(taxh=request.data["taxh"]).count()
+				classroom=Classroom.objects.get(id=request.data["classroom"])
+				classroom.students_in=Student.objects.filter(taxh=request.data["classroom"]).count()
 				if classroom.students_in <= classroom.maximum :
 						
 						classroom.save()
@@ -62,8 +77,8 @@ def students(request):
 						student=Student.objects.get(student_id=serializer.data["student_id"])
 						student.delete()
 						return JsonResponse({'message':"You can't add more students in this classroom"},status=status.HTTP_400_BAD_REQUEST)
-			else:
-				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+			
+				
 	
 	elif request.method=="DELETE":
 		if request.user.role==1 :
@@ -88,13 +103,13 @@ def student_update(request,id=''):
 			try:
 				student=Student.objects.get(student_id=id)
 				classs=student.taxh.id
-			
+				apous=student.apousies
 			except :
 				return JsonResponse({'message': ' Student not found'}, status=status.HTTP_404_NOT_FOUND)
 		elif request.user.role==3:
 			student=Student.objects.get(student_id=request.user.id)	
 			classs=student.taxh.id	
-		
+			
 		data=JSONParser().parse(request)
 		serializer=StudentSerializer(student,data=data)
 		if serializer.is_valid():
@@ -106,6 +121,8 @@ def student_update(request,id=''):
 				taxh2.students_in=Student.objects.filter(taxh=serializer.data['taxh']).count()
 				if taxh2.maximum < taxh2.students_in:
 					student.taxh=taxh
+					if request.user.role==3:
+						student.apousies=apous
 					student.save()
 				else:
 					taxh.save()
@@ -268,6 +285,8 @@ def grade(request):
 					except:
 							return JsonResponse({"message":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
 
+			else:
+					return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
 
 	elif request.method=="DELETE":
@@ -290,14 +309,18 @@ def grade_update(request,id):
 			grade=Grades.objects.get(id=id)
 		except:
 			return JsonResponse({'message' : 'Couldnt find a Grade with that id'},status=status.HTTP_404_NOT_FOUND)
-	
-		data=JSONParser.parse(request.data)	
-		serializer=GradesSerializer.parse(grade,data=data)
-		if serializer.is_valid():
-			serializer.save()
-			return Response(serializer.data)
-	
-		return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
+	elif request.user.role==2:
+		try:
+			grade=Grades.objects.get(id=id,teacher=request.user)
+		except:
+			return JsonResponse({'message' : 'Couldnt find a Grade with that id'},status=status.HTTP_404_NOT_FOUND)
+	data=JSONParser.parse(request.data)	
+	serializer=GradesSerializer.parse(grade,data=data)
+	if serializer.is_valid():
+		serializer.save()
+		return Response(serializer.data)
+
+	return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
 
 	
 
@@ -392,13 +415,23 @@ def teacher(request):
 
 	elif request.method=="POST":
 			data=request.data
-			if request.user.role==2:
-				new_user=request.user
+			if request.user.role==4 :
+				student=Student.objects.filter(user=request.user).count()
+				if student==0:
+					new_user=request.user
+					new_user.role=2
+					new_user.save()
+				else:
+					return JsonResponse({'message':"You already have a role"},status=status.HTTP_400_BAD_REQUEST)
+
 			elif request.user.role==1:
 				user_id=data["user"]
 				new_user=User.objects.get(username=user_id)
+			elif request.user.role==2:
+				 return JsonResponse({'message':"You already are a teacher"},status=status.HTTP_400_BAD_REQUEST)			
+
 			else:
-				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+				 return JsonResponse({'message':"You already are a student"},status=status.HTTP_400_BAD_REQUEST)			
 
 
 			new_Teacher=Teacher.objects.create(user=new_user,first_name=data["first_name"],last_name=data["last_name"],phone=data["phone"],email=data["email"])		

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,re_path,include
-
+from api.registerview import RegisterApi
 from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView)
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -8,5 +8,6 @@ urlpatterns = [
     path('api/auth/',include('djoser.urls')),
     path('api/auth/', include('djoser.urls.jwt')),
     path('api/token/',TokenObtainPairView.as_view()),
-    path('api/token/refresh/',TokenRefreshView.as_view())
+    path('api/token/refresh/',TokenRefreshView.as_view()),
+    path('api/register/',RegisterApi.as_view())
 ]
