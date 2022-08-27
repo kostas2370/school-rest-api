@@ -56,7 +56,7 @@ def classroom_update(request,id):
 		except:
 			return JsonResponse({'message' : 'Couldnt find a class with that id'},status=status.HTTP_404_NOT_FOUND)
 	
-		data=JSONParser.parse(request.data)
+		data=JSONParser().parse(request)
 		serializer=ClassroomSerializer(classe,data=data)
 	
 		if serializer.is_valid():

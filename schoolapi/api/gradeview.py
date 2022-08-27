@@ -126,7 +126,7 @@ def grade_update(request,id):
         return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
     
     if grade:
-        data=JSONParser.parse(request.data) 
+        data=JSONParser().parse(request) 
         serializer=GradesSerializer.parse(grade,data=data)
         if serializer.is_valid():
             serializer.save()

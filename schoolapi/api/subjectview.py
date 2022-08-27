@@ -59,11 +59,12 @@ def SSubject(request):
 @api_view(["PUT"])
 def subject_update(request,id):
 	if request.user.role==1:
-		try:
-			subj=subject.objects.get(subject_id=id)
-		except:
+		
+		subj=subject.objects.get(subject_id=id)
+		
+		if subj==[]:
 			return JsonResponse({'message':'Subject not found'},status=status.HTTP_404_NOT_FOUND)
-	
+		
 		data=JSONParser().parse(request)
 		serializer=SubjectSerializer(subj,data=data)
 		if serializer.is_valid():

@@ -86,7 +86,7 @@ def teacher_update(request,id):
 	else:
 		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
-	data=JSONParser.parsers(request.data)
+	data=JSONParser().parse(request)
 	serializer=TeacherSerializer(teacher,data=data)
 	if serializer.is_valid():
 		serializer.save()
