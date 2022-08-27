@@ -1,22 +1,18 @@
 from django.urls import path
 
 
-from . import views 
+from . import teacherview,studentview,classview ,gradeview,subjectview
 
 urlpatterns= [ 
-path('student/',views.students),
-path('student/update/',views.student_update),
-path('student/update/<int:id>/',views.student_update),
-
-path('classroom/',views.classroom),
-path('classroom/update/<int:id>/',views.classroom_update),
-
-path('grade/',views.grade),
-path('grade/update/<int:id>/',views.grade_update),
-
-path('subject/',views.SSubject),
-path('subject/update/<int:id>/',views.subject_update),
-
-path('teacher/',views.teacher),
-
+path('student/',studentview.students),
+path('student/update/',studentview.student_update),
+path('student/update/<int:id>/',studentview.student_update),
+path('classroom/',classview.classroom),
+path('classroom/update/<int:id>/',classview.classroom_update),
+path('grade/',gradeview.grade),
+path('grade/update/<int:id>/',gradeview.grade_update),
+path('subject/',subjectview.SSubject),
+path('subject/update/<int:id>/',subjectview.subject_update),
+path('teacher/',teacherview.teacher),
+path('teacher/',teacherview.teacher_update)
 ]
