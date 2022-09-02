@@ -109,7 +109,6 @@ class Grades(models.Model):
 
 
 class Assignments(models.Model):
-	teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
 	pdf_question=models.FileField(upload_to="assigments",blank=True)
 	Subject=models.ForeignKey(subject,on_delete=models.CASCADE,blank=True)
 	created=models.DateTimeField(auto_now_add=True)
