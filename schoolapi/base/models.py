@@ -2,7 +2,7 @@ from django.db import models
 
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 class User(AbstractUser):
 
 	choices=((1,"school_manager"),(2,"school_teacher"),(3,"student"),(4,'no_role'))
@@ -106,3 +106,40 @@ class Grades(models.Model):
 		return f'{self.student.first_name}{self.student.last_name}{self.subject_name.onoma}'
 	class Meta:
 		unique_together = (('student', 'subject_name'),)
+
+
+class Assignments(models.Model):
+	teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
+	pdf_question=models.FileField(upload_to="assigments",blank=True)
+	Subject=models.ForeignKey(subject,on_delete=models.CASCADE,blank=True)
+	created=models.DateTimeField(auto_now_add=True)
+	deadline=models.DateTimeField(auto_now_add=True)
+	title=models.CharField(max_length=100)
+	question=models.CharField(max_length=1000 , blank=True)
+	id=models.AutoField(primary_key=True)
+	def __str__(self):
+		return f'{self.title} {self.id}'
+
+
+class StudentAssigments(models.Model):
+	Student=models.ForeignKey(Student,on_delete=models.CASCADE)
+	Assignment=models.ForeignKey(Assignments,on_delete=models.CASCADE)
+	file=models.FileField(upload_to="student_assigments",blank=True)
+	id=models.AutoField(primary_key=True)
+	def __str__(self):
+		return f'Student :{self.Student.user},{self.Assignment.title}'
+
+
+	class Meta:
+		unique_together=(('Student','Assignment'),)
+
+class Score(models.Model):
+	id=models.AutoField(primary_key=True)
+	student_assigment=models.OneToOneField(StudentAssigments,on_delete=models.CASCADE)
+	score=models.IntegerField(default=1,validators=[
+            MaxValueValidator(100),
+            MinValueValidator(1)
+        ])
+	def __str__(self):
+		return f'{self.student_assigment} Score : {self.score}'
+
