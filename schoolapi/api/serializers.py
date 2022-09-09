@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from base.models import Student,Teacher,Classroom,subject,Grades
+from base.models import Student,Teacher,Classroom,subject,Grades,Assignments,StudentAssigments
 from base.models import User
 
 
@@ -44,3 +44,13 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'],password = validated_data['password'],role=4 )
         return user
+class AssignmentsSerializer(serializers.ModelSerializer):
+	class Meta:
+		model= Assignments
+		field="__all__"
+
+
+class StudentAssigmentsSerializer(serializers.ModelSerializer):
+	class Meta:
+		model=StudentAssigments
+		field="__all__"

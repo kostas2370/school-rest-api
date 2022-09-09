@@ -124,6 +124,11 @@ class StudentAssigments(models.Model):
 	Student=models.ForeignKey(Student,on_delete=models.CASCADE)
 	Assignment=models.ForeignKey(Assignments,on_delete=models.CASCADE)
 	file=models.FileField(upload_to="student_assigments",blank=True)
+	score=models.IntegerField(default=1,validators=[
+            MaxValueValidator(100),
+            MinValueValidator(1)
+        ],blank=True)
+
 	id=models.AutoField(primary_key=True)
 	def __str__(self):
 		return f'Student :{self.Student.user},{self.Assignment.title}'
@@ -132,13 +137,4 @@ class StudentAssigments(models.Model):
 	class Meta:
 		unique_together=(('Student','Assignment'),)
 
-class Score(models.Model):
-	id=models.AutoField(primary_key=True)
-	student_assigment=models.OneToOneField(StudentAssigments,on_delete=models.CASCADE)
-	score=models.IntegerField(default=1,validators=[
-            MaxValueValidator(100),
-            MinValueValidator(1)
-        ])
-	def __str__(self):
-		return f'{self.student_assigment} Score : {self.score}'
 
