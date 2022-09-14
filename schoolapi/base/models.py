@@ -112,7 +112,7 @@ class Assignments(models.Model):
 	pdf_question=models.FileField(upload_to="assigments",blank=True)
 	Subject=models.ForeignKey(subject,on_delete=models.CASCADE,blank=True)
 	created=models.DateTimeField(auto_now_add=True)
-	deadline=models.DateTimeField(auto_now_add=True)
+	deadline=models.DateTimeField()
 	title=models.CharField(max_length=100)
 	question=models.CharField(max_length=1000 , blank=True)
 	id=models.AutoField(primary_key=True)
