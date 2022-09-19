@@ -71,3 +71,21 @@ def assignments(request):
 
 @api_view(["PUT"])
 def assignments_update(request,id):
+	assigment=Assignments.objects.get(id=id)
+	if assigment.exists():	
+		if request.user.role<3:
+			if user.request.role==2
+				if assigment.Subject.teacher.user!=request.user:
+					return JsonResponse({'message':"No permissions"},status=status.HTTP_400_BAD_REQUEST)
+			
+			data=JSONParser().parse(request)
+			serializer=AssignmentsSerializer(assigment,data=data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data)
+			return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
+		else:		
+			return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+	return JsonResponse({'message' : 'Couldnt find assigment with that id'},status=status.HTTP_404_NOT_FOUND)
+
+			

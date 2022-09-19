@@ -37,23 +37,23 @@ def classroom(request):
 		elif request.method=="DELETE":
 	
 				id=request.query_params.get("id",None)
-				try:
-					classroom =Classroom.objects.get(id=id)
+				
+				classroom =Classroom.objects.get(id=id)
+				if classroom.exists():
 					classroom.delete()
 					return JsonResponse({'message': ' Student  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-				except:
-					return JsonResponse({'message' : 'Couldnts find classroom with that id'},status=status.HTTP_404_NOT_FOUND)
-	else:
-		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+			
+				return JsonResponse({'message' : 'Couldnts find classroom with that id'},status=status.HTTP_404_NOT_FOUND)
+	return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
 
 
 @api_view(["PUT"])
 def classroom_update(request,id):
 	if request.user.role==1:
-		try:
+		
 			classe=Classroom.objects.get(id=id)
-		except:
+		if !classe.exists():
 			return JsonResponse({'message' : 'Couldnt find a class with that id'},status=status.HTTP_404_NOT_FOUND)
 	
 		data=JSONParser().parse(request)

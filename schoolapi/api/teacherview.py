@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from base.models import Student,subject,Grades,Classroom,Teacher,User
-from .serializers import StudentSerializer,TeacherSerializer,ClassroomSerializer,GradesSerializer,SubjectSerializer
+from .serializers import TeacherSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 
@@ -75,17 +75,18 @@ def teacher(request):
 
 
 @api_view(["PUT"])
-def teacher_update(request,id):
+def teacher_update(request,id=None):
 	if request.user.role==1:
-		try:
-			teacher=Teacher.objects.get(teacher_id=id)
-		except:
-			return JsonResponse({'message':'Teacher not found'},status=status.HTTP_404_NOT_FOUND)
-	elif request.user.role==2:
+		
+		teacher=Teacher.objects.get(teacher_id=id)
+		
+	elif request.user.role==2 or id ==None:
 		teacher=Teacher.objects.get(user=request.user)
 	else:
 		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
+	if !teacher.exists():
+			return JsonResponse({'message':'Teacher not found'},status=status.HTTP_404_NOT_FOUND)
 	data=JSONParser().parse(request)
 	serializer=TeacherSerializer(teacher,data=data)
 	if serializer.is_valid():

@@ -113,6 +113,7 @@ class Assignments(models.Model):
 	Subject=models.ForeignKey(subject,on_delete=models.CASCADE,blank=True)
 	created=models.DateTimeField(auto_now_add=True)
 	deadline=models.DateTimeField()
+	classroom=models.ForeignKey(Classroom,on_delete=models.CASCADE,blank=True)
 	title=models.CharField(max_length=100)
 	question=models.CharField(max_length=1000 , blank=True)
 	id=models.AutoField(primary_key=True)
@@ -121,7 +122,7 @@ class Assignments(models.Model):
 
 
 class StudentAssigments(models.Model):
-	Student=models.ForeignKey(Student,on_delete=models.CASCADE)
+	student=models.ForeignKey(Student,on_delete=models.CASCADE)
 	Assignment=models.ForeignKey(Assignments,on_delete=models.CASCADE)
 	file=models.FileField(upload_to="student_assigments",blank=True)
 	score=models.IntegerField(default=1,validators=[
