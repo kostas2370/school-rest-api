@@ -60,5 +60,23 @@ def studentassigment(request):
 			else :
 					return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
 
+	elif request.method=="DELETE":
+		id=request.query_params.get('id',None)
+		stud=Student.objects.get(user=request.user)
+		if id:
+			assigment=StudentAssigments.objects.get(id=id)
+			if assigment.exists():
+				if request.user.role==1:
+					assigment.delete()
+					return JsonResponse({'message': ' assigment  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+				elif request.user.role==3:
+					if stud==assigment.student:
+						assigment.delete()
+						return JsonResponse({'message': ' assigment  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+				else:
+					return JsonResponse({'message':"You dont have permission"},status=status.HTTP_400_BAD_REQUEST)
+		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
