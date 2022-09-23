@@ -5,7 +5,7 @@ from base.models import Student,subject,Grades,Teacher
 from .serializers import GradesSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
-
+taxh
 @api_view(["GET","POST","DELETE"])
 def grade(request):
     if request.method=="GET":
@@ -93,7 +93,7 @@ def grade(request):
                     Student=Student.objects.get(student_id=request.data['id'])
                     try:
                         if Subject.classroom ==student.classroom and subject.teacher == teacher.teacher_id :
-                            grades=Grades.objects.create(student=student.student_id,subject_name=Subject.subject_id,teacher=teacher.id,classroom=Subject.taxh,grade=request.data["grade"])
+                            grades=Grades.objects.create(student=student.student_id,subject_name=Subject.subject_id,teacher=teacher.id,classroom=Subject.classroom,grade=request.data["grade"])
                         else :
                             return JsonResponse({"message":"No permissions"},status=status.HTTP_401_UNAUTHORIZEDT)
                     except:
