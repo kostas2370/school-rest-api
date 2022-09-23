@@ -3,6 +3,7 @@ from django.db import models
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
+
 class User(AbstractUser):
 
 	choices=((1,"school_manager"),(2,"school_teacher"),(3,"student"),(4,'no_role'))

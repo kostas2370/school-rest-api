@@ -6,7 +6,7 @@ from .serializers import AssignmentsSerializer,StudentAssigmentsSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 
-taxh
+
 @api_view(["GET","POST","DELETE"])
 def assignments(request):
 	if request.method=="GET" and request.user.role != 4 :

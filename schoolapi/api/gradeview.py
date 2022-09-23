@@ -5,7 +5,7 @@ from base.models import Student,subject,Grades,Teacher
 from .serializers import GradesSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
-taxh
+
 @api_view(["GET","POST","DELETE"])
 def grade(request):
     if request.method=="GET":
