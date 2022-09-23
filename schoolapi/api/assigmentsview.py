@@ -33,7 +33,7 @@ def assignments(request):
 			if request.user.role==2:
 				if Subject.teacher.user==request.user :
 					try:
-						new_assigment=Assignments.objects.create(Subject=Subject,deadline=data["deadline"],classroom=Subject.taxh,title=data["title"],question=data['question'])
+						new_assigment=Assignments.objects.create(pdf_question=request.FILES,Subject=Subject,deadline=data["deadline"],classroom=Subject.taxh,title=data["title"],question=data['question'])
 						new_assigment.save()
 					except:
 						return JsonResponse({'message':"Bad request"},status=status.HTTP_400_BAD_REQUEST)
@@ -41,7 +41,7 @@ def assignments(request):
 					return JsonResponse({"message":"You dont have permission to add assgment in this subject"},status=status.HTTP_400_BAD_REQUEST)
 			else:
 				try:
-					new_assigment=Assignments.objects.create(pdf_question=request.FILES[0],Subject=Subject,deadline=data["deadline"],classroom=Subject.classroom,title=data["title"],question=data['question'])
+					new_assigment=Assignments.objects.create(pdf_question=request.FILES,Subject=Subject,deadline=data["deadline"],classroom=Subject.classroom,title=data["title"],question=data['question'])
 				except:
 					return JsonResponse({'message':"Bad request"},status=status.HTTP_400_BAD_REQUEST)
 	
@@ -65,9 +65,8 @@ def assignments(request):
 					else:
 						return JsonResponse({'message':"No permissions"},status=status.HTTP_400_BAD_REQUEST)
 			return JsonResponse({'message': ' assigment  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-		else:
-			return JsonResponse({'message':"No permissions"},status=status.HTTP_400_BAD_REQUEST)
-	return JsonResponse({'message':"No permissions"},status=status.HTTP_400_BAD_REQUEST)
+		
+	return JsonResponse({'message':"No permissions"},status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(["PUT"])
 def assignments_update(request,id):
@@ -76,7 +75,7 @@ def assignments_update(request,id):
 		if request.user.role<3:
 			if user.request.role==2:
 				if assigment.Subject.teacher.user!=request.user:
-					return JsonResponse({'message':"No permissions"},status=status.HTTP_400_BAD_REQUEST)
+					return JsonResponse({'message':"No permissions"},status=status.HTTP_401_UNAUTHORIZED)
 			
 			data=JSONParser().parse(request)
 			serializer=AssignmentsSerializer(assigment,data=data)
@@ -85,7 +84,7 @@ def assignments_update(request,id):
 				return Response(serializer.data)
 			return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
 		else:		
-			return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+			return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_401_UNAUTHORIZED)
 	return JsonResponse({'message' : 'Couldnt find assigment with that id'},status=status.HTTP_404_NOT_FOUND)
 
 			
