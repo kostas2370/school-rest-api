@@ -47,10 +47,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 class AssignmentsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model= Assignments
-		field="__all__"
+		fields="__all__"
 
 
 class StudentAssigmentsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=StudentAssigments
-		field="__all__"
+		fields="__all__"

@@ -86,7 +86,7 @@ def student_assigment_add_grade(request):
 	if id ==None or score==None :
 		return JsonResponse({'message' : 'You need to add parameters'},status=status.HTTP_400_BAD_REQUEST) 
 	assigm=StudentAssigments.objects.get(id = id)
-	if !assigm.exists():
+	if assigm.exists()==False:
 		return JsonResponse({'message' : 'Couldnts find assigment with that id'},status=status.HTTP_404_NOT_FOUND) 
 	
 	if request.user.role==1 :

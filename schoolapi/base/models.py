@@ -136,6 +136,6 @@ class StudentAssigments(models.Model):
 
 
 	class Meta:
-		unique_together=(('Student','Assignment'),)
+		unique_together=(('student','Assignment'),)
 
 

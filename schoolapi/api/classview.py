@@ -52,8 +52,8 @@ def classroom(request):
 def classroom_update(request,id):
 	if request.user.role==1:
 		
-			classe=Classroom.objects.get(id=id)
-		if !classe.exists():
+		classe=Classroom.objects.get(id=id)
+		if classe.exists()==False:
 			return JsonResponse({'message' : 'Couldnt find a class with that id'},status=status.HTTP_404_NOT_FOUND)
 	
 		data=JSONParser().parse(request)

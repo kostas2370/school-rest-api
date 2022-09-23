@@ -62,7 +62,7 @@ def teacher(request):
 			elif request.user.role==1:
 				teacher_id=request.query_params.get("teacher_id",None)
 			else:
-				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_401_UNAUTHORIZED)
 
 			try:
 				teacher =Teacher.objects.get(teacher_id=teacher_id)
@@ -83,9 +83,9 @@ def teacher_update(request,id=None):
 	elif request.user.role==2 or id ==None:
 		teacher=Teacher.objects.get(user=request.user)
 	else:
-		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_401_UNAUTHORIZED)
 
-	if !teacher.exists():
+	if teacher.exists()==False:
 			return JsonResponse({'message':'Teacher not found'},status=status.HTTP_404_NOT_FOUND)
 	data=JSONParser().parse(request)
 	serializer=TeacherSerializer(teacher,data=data)
