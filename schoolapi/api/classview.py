@@ -44,7 +44,7 @@ def classroom(request):
 					return JsonResponse({'message': ' Student  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 			
 				return JsonResponse({'message' : 'Couldnts find classroom with that id'},status=status.HTTP_404_NOT_FOUND)
-	return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+	return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -65,4 +65,4 @@ def classroom_update(request,id):
 	
 		return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
 	else:	
-		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+		return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)

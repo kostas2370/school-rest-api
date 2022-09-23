@@ -18,14 +18,14 @@ def studentassigment(request):
 				student_assigment=StudentAssigments.objects.filter(id=id)
 
 			elif student and assigment :
-				student_assigment=StudentAssigments.objects.filter(Student=Student,Assignment=assigment)
+				student_assigment=StudentAssigments.objects.filter(Student=Student,assignment=assigment)
 
 
 			elif student:
 				student_assigment=StudentAssigments.objects.filter(Student=Student)
 
 			elif assigment:
-				student_assigment=StudentAssigments.objects.filter(Assignment=assigment)
+				student_assigment=StudentAssigments.objects.filter(assignment=assigment)
 			else:
 				return JsonResponse({'message':'Bad request , you need to add params'},status=status.HTTP_400_BAD_REQUEST)
 		
@@ -38,8 +38,9 @@ def studentassigment(request):
 			else:
 				student_assigment=StudentAssigments.objects.filter(student=stud)
 
+				
 		else :
-			  return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+			  return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 
 		serializer=StudentAssigmentsSerializer(student_assigment,many=True)
 		return Response(serializer.data)
@@ -55,10 +56,8 @@ def studentassigment(request):
 				if serializer.data["student"] == request.user.Student.id :
 					serializer.save()
 					return Response(serializer.data)
-				else:
-					return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
-			else :
-					return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+				
+			return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 
 	elif request.method=="DELETE":
 		id=request.query_params.get('id',None)
@@ -100,7 +99,3 @@ def student_assigment_add_grade(request):
 	assigm.save()
 	return JsonResponse({'message' : 'Score was added succesfully',"new grade ":score},status=status.HTTP_200_OK) 
 
-
-@api_view(['PUT'])
-def student_assigment_edit(request,id):
-	pass

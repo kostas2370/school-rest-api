@@ -21,11 +21,11 @@ def students(request):
 				if student_id  :
 					students=Student.objects.filter(student_id=student_id)
 				elif first_name and last_name and classroom:
-					students=Student.objects.filter(first_name=first_name,last_name=last_name,taxh=classroom)		 
+					students=Student.objects.filter(first_name=first_name,last_name=last_name,classroom=classroom)		 
 				elif first_name and last_name:
 					students=Student.objects.filter(first_name=first_name,last_name=last_name)
 				elif classroom:
-					students=Student.objects.filter(taxh=classroom)
+					students=Student.objects.filter(classroom=classroom)
 				elif last_name:
 					students=Student.objects.filter(last_name=last_name)
 				elif first_name:
@@ -45,7 +45,7 @@ def students(request):
 				serializer=StudentSerializer(students)
 				return Response(serializer.data)
 			else:
-				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+				return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 	elif request.method=="POST":
 			
 				data=request.data
@@ -66,14 +66,14 @@ def students(request):
 				else:
 						return JsonResponse({'message':"You already are a studentr"},status=status.HTTP_400_BAD_REQUEST)			
 
-				taxh=Classroom.objects.get(id=data['classroom'])
+				classroom=Classroom.objects.get(id=data['classroom'])
 				try:
 					new_student=Student.objects.create(user=new_user,first_name=data["first_name"],last_name=data["last_name"],taxh=taxh,phone=data["phone"],email=data["email"],apousies=0)
 				except:
 					return JsonResponse({'message':"You need to fix the student information"},status=status.HTTP_400_BAD_REQUEST)	
 				
 				classroom=Classroom.objects.get(id=request.data["classroom"])
-				classroom.students_in=Student.objects.filter(taxh=request.data["classroom"]).count()
+				classroom.students_in=Student.objects.filter(classroom=request.data["classroom"]).count()
 				if classroom.students_in <= classroom.maximum :
 						
 						classroom.save()
@@ -92,8 +92,8 @@ def students(request):
 			student_id=request.query_params.get("student_id",None)
 			try:
 				student=Student.objects.get(student_id=student_id)
-				classroom=Classroom.objects.get(id=student.taxh.id)
-				classroom.students_in=Student.objects.filter(taxh=student.taxh.id).count()
+				classroom=Classroom.objects.get(id=student.classroom.id)
+				classroom.students_in=Student.objects.filter(classroom=student.classroom.id).count()
 				classroom.save()
 				student.delete()
 				return JsonResponse({'message': ' Student  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
@@ -101,7 +101,7 @@ def students(request):
 			except:
 					return JsonResponse({'message': ' Student not found'}, status=status.HTTP_404_NOT_FOUND)		
 		else:
-			return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+			return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['PUT'])
 def student_update(request,id=''):
@@ -109,7 +109,7 @@ def student_update(request,id=''):
 			
 		try:
 			student=Student.objects.get(student_id=id)
-			classs=student.taxh.id
+			classs=student.classroom.id
 			apous=student.apousies
 		except :
 			return JsonResponse({'message': ' Student not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -119,13 +119,13 @@ def student_update(request,id=''):
 		serializer=StudentSerializer(student,data=data)
 		if serializer.is_valid():
 			serializer.save()
-			if classs!=serializer.data['taxh']:
+			if classs!=serializer.data['classroom']:
 				taxh=Classroom.objects.get(id=classs)
-				taxh2=Classroom.objects.get(id=serializer.data['taxh'])
+				taxh2=Classroom.objects.get(id=serializer.data['classroom'])
 				taxh.students_in-=1
-				taxh2.students_in=Student.objects.filter(taxh=serializer.data['taxh']).count()
+				taxh2.students_in=Student.objects.filter(classroom=serializer.data['classroom']).count()
 				if taxh2.maximum < taxh2.students_in:
-					student.taxh=taxh
+					student.classroom=taxh
 					if request.user.role==3:
 						student.apousies=apous
 					student.save()
@@ -138,4 +138,4 @@ def student_update(request,id=''):
 			
 		return JsonResponse({'message': ' Bad request'}, status=status.HTTP_400_BAD_REQUEST)
 	else:
-		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+		return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)

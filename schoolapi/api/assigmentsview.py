@@ -63,7 +63,7 @@ def assignments(request):
 					if assigment.Subject.teacher.user==request.user :	
 						assigment.delete()
 					else:
-						return JsonResponse({'message':"No permissions"},status=status.HTTP_400_BAD_REQUEST)
+						return JsonResponse({'message':"No permissions"},status=status.HTTP_401_UNAUTHORIZED)
 			return JsonResponse({'message': ' assigment  deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 		
 	return JsonResponse({'message':"No permissions"},status=status.HTTP_401_UNAUTHORIZED)

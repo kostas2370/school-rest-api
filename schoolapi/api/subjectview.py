@@ -7,7 +7,6 @@ from .serializers import SubjectSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-
 @api_view(["GET","POST","DELETE"])
 def SSubject(request):
 	
@@ -15,13 +14,13 @@ def SSubject(request):
 				
 				teacher=request.query_params.get("teacher",None)
 				onoma=request.query_params.get("onoma",None)
-				taxh=request.query_params.get("taxh",None)
+				classroom=request.query_params.get("classroom",None)
 				subject_id=request.query_params.get("subject_id",None)
 				if teacher  :
 					Subject = subject.objects.filter(teacher=teacher)
 					
-				elif onoma  and taxh :
-					Subject = subject.objects.filter(onoma=onoma,taxh=taxh)	
+				elif onoma  and classroom :
+					Subject = subject.objects.filter(onoma=onoma,classroom=classroom)	
 			
 				elif onoma  :
 					Subject = subject.objects.filter(onoma=onoma)	
@@ -54,7 +53,7 @@ def SSubject(request):
 						return JsonResponse({'message' : 'Couldnts find Subject with that id'},status=status.HTTP_404_NOT_FOUND)
 		else:
 
-			return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+			return JsonResponse({'message':"You dont have permission"},status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(["PUT"])
 def subject_update(request,id):
@@ -73,5 +72,5 @@ def subject_update(request,id):
 	
 		return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
 	else:
-		return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+		return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZEDT)
 

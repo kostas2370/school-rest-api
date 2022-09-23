@@ -17,5 +17,5 @@ path('teacher/',teacherview.teacher),
 path('teacher/',teacherview.teacher_update),
 path('assigment/',assigmentsview.assignments),
 path('assigment/update/<int:id>',assigmentsview.assignments_update),
-
+path('student/assigment/addgrade/<int:id>')
 ]

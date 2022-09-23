@@ -63,7 +63,7 @@ def grade(request):
             else:
                 grades=Grades.objects.filter(student=student)
         else:
-            return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
     
 
 
@@ -78,8 +78,8 @@ def grade(request):
                     
                     student=Student.objects.get(student_id=request.data["student"])
                     sub=subject.objects.get(subject_id=request.data["subject_name"])
-                    if student.taxh==sub.taxh:
-                            serializer.data["classroom"]=student.taxh
+                    if student.classroom==sub.classroom:
+                            serializer.data["classroom"]=student.classroom
                             serializer.save()
                             return Response(serializer.data)
                     else:
@@ -92,15 +92,15 @@ def grade(request):
                     Subject=subject.objects.get(subject_id=request.data["subject"])
                     Student=Student.objects.get(student_id=request.data['id'])
                     try:
-                        if Subject.taxh ==student.taxh and subject.teacher == teacher.teacher_id :
+                        if Subject.classroom ==student.classroom and subject.teacher == teacher.teacher_id :
                             grades=Grades.objects.create(student=student.student_id,subject_name=Subject.subject_id,teacher=teacher.id,classroom=Subject.taxh,grade=request.data["grade"])
                         else :
-                            return JsonResponse({"message":"No permissions"},status=status.HTTP_400_BAD_REQUEST)
+                            return JsonResponse({"message":"No permissions"},status=status.HTTP_401_UNAUTHORIZEDT)
                     except:
                             return JsonResponse({"message":"Bad request"},status=status.HTTP_400_BAD_REQUEST)
 
             else:
-                    return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+                    return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 
 
     elif request.method=="DELETE":
@@ -113,7 +113,7 @@ def grade(request):
                 except:
                     return JsonResponse({'message' : 'Couldnts find Grades with that id'},status=status.HTTP_404_NOT_FOUND) 
             else:
-                return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(["PUT"])
@@ -123,7 +123,7 @@ def grade_update(request,id):
     elif request.user.role==2:
             grade=Grades.objects.get(id=id,teacher=request.user)    
     else:
-        return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
     
     if grade:
         data=JSONParser().parse(request) 

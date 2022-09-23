@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from base.models import Student,subject,Grades,Classroom,Teacher,User
+from base.models import Student,Subject,Grades,Classroom,Teacher,User
 from .serializers import TeacherSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
@@ -62,7 +62,7 @@ def teacher(request):
 			elif request.user.role==1:
 				teacher_id=request.query_params.get("teacher_id",None)
 			else:
-				return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_401_UNAUTHORIZED)
+				return JsonResponse({'message':"You dont have permission"},status=status.HTTP_401_UNAUTHORIZED)
 
 			try:
 				teacher =Teacher.objects.get(teacher_id=teacher_id)
