@@ -79,4 +79,28 @@ def studentassigment(request):
 
 
 
+@api_view(['PUT'])
+def student_assigment_add_grade(request):
+	id=request.query_params.get('id',None)
+	score=request.query_params.get('score',None)
+	if id ==None or score==None :
+		return JsonResponse({'message' : 'You need to add parameters'},status=status.HTTP_400_BAD_REQUEST) 
+	assigm=StudentAssigments.objects.get(id = id)
+	if !assigm.exists():
+		return JsonResponse({'message' : 'Couldnts find assigment with that id'},status=status.HTTP_404_NOT_FOUND) 
+	
+	if request.user.role==1 :
+		assigm.score=score
+	elif request.user.role==2:
+		if assigm.Assigment.teacher.user == request.user :
+			assigm.score=score
+	else:
+		return JsonResponse({'message' : 'Couldnts find Grades with that id'},status=status.HTTP_400_BAD_REQUEST) 
 
+	assigm.save()
+	return JsonResponse({'message' : 'Score was added succesfully',"new grade ":score},status=status.HTTP_200_OK) 
+
+
+@api_view(['PUT'])
+def student_assigment_edit(request,id):
+	pass
