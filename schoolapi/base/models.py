@@ -78,7 +78,7 @@ class Student(models.Model):
 		return f'{self.first_name}{self.last_name}{self.student_id}'
 class Grades(models.Model):
 	student=models.ForeignKey(Student,on_delete=models.CASCADE)
-	Subject=models.ForeignKey(subject,on_delete=models.CASCADE)
+	subject_name=models.ForeignKey(subject,on_delete=models.CASCADE)
 	teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
 	classroom=models.ForeignKey(Classroom,on_delete=models.CASCADE)
 	grade=models.IntegerField(default=0)
