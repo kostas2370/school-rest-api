@@ -1,7 +1,7 @@
 from django.urls import path
 
 
-from . import teacherview,studentview,classview ,gradeview,subjectview,assigmentsview
+from . import teacherview,studentview,classview ,gradeview,subjectview,assigmentsview,studentassigment
 
 urlpatterns= [ 
 path('student/',studentview.students),
@@ -17,5 +17,6 @@ path('teacher/',teacherview.teacher),
 path('teacher/',teacherview.teacher_update),
 path('assigment/',assigmentsview.assignments),
 path('assigment/update/<int:id>',assigmentsview.assignments_update),
-path('student/assigment/addgrade/<int:id>')
+path('student/assigment/addgrade/<int:id>',studentassigment.student_assigment_add_grade),
+path('assigment/',studentassigment.studentassigment)
 ]
