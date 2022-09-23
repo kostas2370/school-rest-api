@@ -19,4 +19,4 @@ path('assigment/',assigmentsview.assignments),
 path('assigment/update/<int:id>',assigmentsview.assignments_update),
 path('student/assigment/addgrade/<int:id>',studentassigment.student_assigment_add_grade),
 path('assigment/',studentassigment.studentassigment)
-]
+ ]
