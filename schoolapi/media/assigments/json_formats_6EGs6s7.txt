@@ -1,0 +1,41 @@
+student : 
+{
+	"first_name":"Renato",
+	"last_name":"Krampa",
+	"taxh":2,
+	"phone":"69342342",
+	"email":"zouzounis@gmail.com",
+	"apousies":1
+}
+
+grades :
+
+{
+	"grade":3,
+	"student":10,
+	"subject_name":2,
+	"teacher":1,
+	"classroom":1
+}
+
+teacher:
+
+{
+"user":{
+    "username":"kingmdsdaajdfsdaaa",
+    "password":"damis2002"
+        },
+"first_name":"tznis",
+"last_name":"xdkidis",
+"phone":"6932344",
+"email":"hehe@gmail.com"
+}
+
+subject :
+
+{
+        "subject_id": 1,
+        "onoma": "Istoria",
+        "teacher": 1,
+        "taxh": 1
+    }

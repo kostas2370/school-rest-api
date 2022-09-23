@@ -41,7 +41,7 @@ def assignments(request):
 					return JsonResponse({"message":"You dont have permission to add assgment in this subject"},status=status.HTTP_400_BAD_REQUEST)
 			else:
 				try:
-					new_assigment=Assignments.objects.create(pdf_question=request.FILES,Subject=Subject,deadline=data["deadline"],classroom=Subject.classroom,title=data["title"],question=data['question'])
+					new_assigment=Assignments.objects.create(pdf_question=request.FILES['file'],Subject=Subject,deadline=data["deadline"],classroom=Subject.classroom,title=data["title"],question=data['question'])
 				except:
 					return JsonResponse({'message':"Bad request"},status=status.HTTP_400_BAD_REQUEST)
 	
