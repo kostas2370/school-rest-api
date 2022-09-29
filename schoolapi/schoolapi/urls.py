@@ -9,5 +9,6 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls.jwt')),
     path('api/token/',TokenObtainPairView.as_view()),
     path('api/token/refresh/',TokenRefreshView.as_view()),
-    path('api/register/',RegisterApi.as_view())
+    path('api/register/',RegisterApi.as_view()),
+    
 ]

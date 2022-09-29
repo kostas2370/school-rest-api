@@ -84,7 +84,7 @@ def assignments_update(request,id):
 				return Response(serializer.data)
 			return JsonResponse({'message':'Bad request'},status=status.HTTP_400_BAD_REQUEST)
 		else:		
-			return JsonResponse({'message':"You dont have authorasation"},status=status.HTTP_401_UNAUTHORIZED)
+			return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
 	return JsonResponse({'message' : 'Couldnt find assigment with that id'},status=status.HTTP_404_NOT_FOUND)
 
 			
