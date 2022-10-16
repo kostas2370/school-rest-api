@@ -17,7 +17,7 @@ def teacher(request):
 				teacher = Teacher.objects.filter(first_name=first_name,last_name=last_name)
 				
 			elif teacher_id :
-				teacher = Teacher.objects.filter(teacher_id=teacher_id,last_name=last_name)
+				teacher = Teacher.objects.filter(teacher_id=teacher_id)
 			else :
 				teacher=Teacher.objects.all()
 		

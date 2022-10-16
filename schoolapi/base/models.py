@@ -15,7 +15,7 @@ class Teacher(models.Model):
 	last_name=models.CharField(max_length=100)
 	phone=models.CharField(max_length=10)
 	teacher_id = models.AutoField(primary_key=True)
-	email=models.EmailField(max_length=254)
+	email=models.EmailField(max_length=254,unique=True)
 	created=models.DateTimeField(auto_now_add=True)
 	def __str__(self):
 		return f'{self.first_name}{self.last_name}'
@@ -63,15 +63,15 @@ class Student(models.Model):
 	classroom=models.ForeignKey(Classroom,on_delete=models.CASCADE)
 	phone=models.CharField(max_length=10)
 	student_id = models.AutoField(primary_key=True)
-	email=models.EmailField(max_length=254)
+	email=models.EmailField(max_length=254,unique=True)
 	created=models.DateTimeField(auto_now_add=True)
 	photo=models.ImageField(default="student_pics/default.png",upload_to="student_pics")
 	apousies=models.IntegerField(default=0)
 	def save(self,*args, **kwargs):
 		super().save()
 		img= Image.open(self.photo.path)	
-		if img.height >300 or img.width >300:
-			outputsize=(300,300)
+		if img.height >184 or img.width >184:
+			outputsize=(184,184)
 			img.thumbnail(outputsize)
 			img.save(self.photo.path)
 	def __str__(self):

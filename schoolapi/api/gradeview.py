@@ -1,7 +1,9 @@
+from base.models import Student
+from base.models import subject,Grades,Teacher
 from rest_framework.response import Response
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from base.models import Student,subject,Grades,Teacher
+
 from .serializers import GradesSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -52,16 +54,17 @@ def grade(request):
                 grades=Grades.objects.filter(teacher=teacher.teacher_id)
 
         elif request.user.role==3:
-            student=Student.objects.get(user=request.user)
+            global Student
+            stud= Student.objects.get(user=request.user)
             
             Subject=request.query_params.get("subject_name",None)
             classroom=request.query_params.get("classroom",None)
             if Subject :
-                grades=Grades.objects.filter(student=student,subject_name=Subject)
+                grades=Grades.objects.filter(student=stud,subject_name=Subject)
             elif classroom:
-                grades=Grades.objects.filter(student=student,classroom=classroom)
+                grades=Grades.objects.filter(student=stud,classroom=classroom)
             else:
-                grades=Grades.objects.filter(student=student)
+                grades=Grades.objects.filter(student=stud)
         else:
             return JsonResponse({'message':"You dont have permissions"},status=status.HTTP_401_UNAUTHORIZED)
     

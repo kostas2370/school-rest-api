@@ -6,8 +6,8 @@ from base.models import User
 class StudentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=Student
-		fields=("first_name",'last_name','phone','email','photo','apousies','user','taxh')
-		read_only_fields=('student_id','created')
+		fields="__all__"
+		
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
