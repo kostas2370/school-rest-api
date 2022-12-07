@@ -33,7 +33,7 @@ def SSubject(request):
 				serializer=SubjectSerializer(Subject,many=True)
 				return Response(serializer.data)
 			
-		
+		As
 		elif request.user.role==1 and request.method != "GET":
 			if request.method=="POST":
 					serializer=SubjectSerializer(data=request.data)
