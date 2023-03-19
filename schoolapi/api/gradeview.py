@@ -1,4 +1,4 @@
-from base.models import subject, Grades, Teacher
+from base.models import subject, Grades, Teacher, Student
 from rest_framework.response import Response
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
@@ -105,7 +105,7 @@ def add_through_csv(request):
     for index, row in df.iterrows():
 
         id = row.get("ids")
-        if not Student.objects.filter(student_id = row["ids"]).exists() :
+        if not Student.objects.filter(student_id = row["ids"]).exists():
             return JsonResponse({"message": f"Student with id : {id} does not exists"},
                                 status = status.HTTP_400_BAD_REQUEST)
 
@@ -115,8 +115,16 @@ def add_through_csv(request):
             return JsonResponse({"message": f"Student with id : {id} is not in the subject's classroom"},
                                 status = status.HTTP_400_BAD_REQUEST)
 
-        if Grades.objects.filter(student = stud, subject_name = subj).exists():
-            return JsonResponse({"message": "This grade already exists"}, status = status.HTTP_400_BAD_REQUEST)
+        if Grades.objects.filter(student = stud, subject_name = subj).exists() and not pd.isna(row["grade"]):
+
+            grade = Grades.objects.get(student = stud, subject_name = subj)
+            grade.grade = row.get("grade")
+            grade.save()
+
+            continue
+
+        if pd.isna(row["grade"]):
+            row["grade"] = 0
 
         grade = Grades.objects.create(student = stud, subject_name = subj, teacher = subj.teacher,
                                       classroom = subj.classroom, grade = row["grade"])

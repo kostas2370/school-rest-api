@@ -58,7 +58,7 @@ def students(request):
         elif request.user.role == 4:
             new_user = request.user
 
-            if not Teacher.objects.filter(user = new_user).count() :
+            if not Teacher.objects.filter(user = new_user).count():
                 new_user.role = 3
 
             else:
@@ -74,7 +74,7 @@ def students(request):
         classroom = Classroom.objects.get(id = (data['classroom']))
 
         try:
-            if (len(request.FILES) > 0):
+            if len(request.FILES) > 0:
                 new_student = Student.objects.create(user = new_user, photo = request.FILES["photo"],
                                                      first_name = data["first_name"], last_name = data["last_name"],
                                                      classroom = classroom, phone = data["phone"],
