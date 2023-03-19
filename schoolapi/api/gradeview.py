@@ -115,6 +115,7 @@ def add_through_csv(request):
             return JsonResponse({"message": f"Student with id : {id} is not in the subject's classroom"},
                                 status = status.HTTP_400_BAD_REQUEST)
 
+
         if Grades.objects.filter(student = stud, subject_name = subj).exists() and not pd.isna(row["grade"]):
 
             grade = Grades.objects.get(student = stud, subject_name = subj)
