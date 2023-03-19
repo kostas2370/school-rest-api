@@ -47,10 +47,6 @@ def studentassigment(request):
         serializer = StudentAssigmentsSerializer(student_assigment, many = True)
         return Response(serializer.data)
 
-
-
-
-
     elif request.method == "POST":
 
         data = request.data
@@ -72,12 +68,6 @@ def studentassigment(request):
                 return JsonResponse({'message': 'Bad request'}, status = status.HTTP_400_BAD_REQUEST)
 
         return JsonResponse({'message': "You dont have permissions"}, status = status.HTTP_401_UNAUTHORIZED)
-
-
-
-
-
-
 
     elif request.method == "DELETE":
         id = request.query_params.get('id', None)

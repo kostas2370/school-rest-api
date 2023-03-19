@@ -97,6 +97,5 @@ def assignments_update(request, id):
         assigment.save()
         return JsonResponse({'message': ' assigment  updated successfully!'}, status = status.HTTP_201_CREATED)
 
-
     except:
         return JsonResponse({'message': "Couldn't find that Student"}, status = status.HTTP_400_BAD_REQUEST)
