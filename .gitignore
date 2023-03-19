@@ -1,2 +1,4 @@
 /schoolapi/db.sqlite3
 /schoolapi/media/
+*.pyc
+
