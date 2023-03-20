@@ -13,14 +13,12 @@ def studentassigment(request):
         id = request.query_params.get('id', None)
         student = request.query_params.get('student', None)
         assigment = request.query_params.get('assigment', None)
-        subj = request.query_params.get('subject', None)
         if request.user.role < 3:
             if id:
                 student_assigment = StudentAssigments.objects.filter(id = id)
 
             elif student and assigment:
                 student_assigment = StudentAssigments.objects.filter(Student = student, assignment = assigment)
-
 
             elif student:
                 student_assigment = StudentAssigments.objects.filter(Student = student)

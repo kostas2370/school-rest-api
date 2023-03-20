@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from django.http.response import JsonResponse
-from base.models import Assignments, subject, Teacher
+from base.models import Assignments,Subject, Teacher
 from .serializers import AssignmentsSerializer, StudentAssigmentsSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -18,9 +18,9 @@ def assignments(request):
             assigment = Assignments.objects.filter(teacher = teacher)
 
         elif subject_id:
-            assigment = Assignments.objects.filter(Subject = subject_id)
+            assigment = Assignments.objects.filter(subject = subject_id)
         elif classroom and subject_id:
-            assigment = Assignments.objects.filter(classroom = classroom, Subject = subject_id)
+            assigment = Assignments.objects.filter(classroom = classroom, subject = subject_id)
         elif classroom:
             assigment = Assignments.objects.filter(classroom = classroom)
         elif id:
@@ -32,16 +32,16 @@ def assignments(request):
 
     if request.user.role == 1 or request.user.role == 2 and request.method == "POST":
         data = request.data
-        Subject = subject.objects.get(subject_id = data['Subject'])
+        subj = Subject.objects.get(subject_id = data['Subject'])
 
-        if Subject.teacher.user != request.user and request.user.role != 1:
+        if subj.teacher.user != request.user and request.user.role != 1:
             return JsonResponse({"message": "You dont have permission to add assgment in this subject"},
                                 status = status.HTTP_400_BAD_REQUEST)
 
         try:
-            new_assigment = Assignments.objects.create(teacher = Subject.teacher, pdf_question = request.FILES['file'],
-                                                       Subject = Subject, deadline = data["deadline"],
-                                                       classroom = Subject.classroom, title = data["title"],
+            new_assigment = Assignments.objects.create(teacher = subj.teacher, pdf_question = request.FILES['file'],
+                                                       subject = subj, deadline = data["deadline"],
+                                                       classroom = subj.classroom, title = data["title"],
                                                        question = data['question'])
             new_assigment.save()
         except :
@@ -60,7 +60,7 @@ def assignments(request):
 
         assigment = Assignments.objects.get(id = id)
 
-        if assigment.Subject.teacher.user != request.user and request.user.role != 1:
+        if assigment.subject.teacher.user != request.user and request.user.role != 1:
             return JsonResponse({'message': "No permissions"}, status = status.HTTP_401_UNAUTHORIZED)
 
         assigment.delete()
@@ -73,11 +73,11 @@ def assignments(request):
 @api_view(["PUT"])
 def assignments_update(request, id):
     data = request.data
-    if (request.user.role == 2):
+    if request.user.role == 2:
         teacher = Teacher.objects.get(user = request.user)
         assigment = Assignments.objects.get(id = id, teacher = teacher)
 
-    elif (request.user.role == 1):
+    elif request.user.role == 1:
         assigment = Assignments.objects.get(id = id)
 
     else:
@@ -92,8 +92,8 @@ def assignments_update(request, id):
         assigment.deadline = data["deadline"]
         assigment.title = data["title"]
         assigment.question = data["question"]
-        subj = subject.objects.get(subject_id = data["Subject"])
-        assigment.Subject = subj
+        subj = Subject.objects.get(subject_id = data["Subject"])
+        assigment.subject = subj
         assigment.save()
         return JsonResponse({'message': ' assigment  updated successfully!'}, status = status.HTTP_201_CREATED)
 

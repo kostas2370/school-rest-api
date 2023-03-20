@@ -46,7 +46,7 @@ class Classroom(models.Model):
         return f'{self.classname}{self.class_number}'
 
 
-class subject(models.Model):
+class Subject(models.Model):
     onoma = models.CharField(max_length = 20)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
     classroom = models.ForeignKey(Classroom, on_delete = models.CASCADE)
@@ -85,7 +85,7 @@ class Student(models.Model):
 
 class Grades(models.Model):
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
-    subject_name = models.ForeignKey(subject, on_delete = models.CASCADE)
+    subject_name = models.ForeignKey(Subject, on_delete = models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
     classroom = models.ForeignKey(Classroom, on_delete = models.CASCADE)
     grade = models.IntegerField(default = 0)
@@ -100,7 +100,7 @@ class Grades(models.Model):
 
 class Assignments(models.Model):
     pdf_question = models.FileField(upload_to = "assigments", blank = True)
-    Subject = models.ForeignKey(subject, on_delete = models.CASCADE, blank = True)
+    subject = models.ForeignKey(Subject, on_delete = models.CASCADE, blank = True)
     created = models.DateField(auto_now_add = True)
     deadline = models.DateField()
     classroom = models.ForeignKey(Classroom, on_delete = models.CASCADE, blank = True)

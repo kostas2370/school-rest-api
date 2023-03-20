@@ -8,7 +8,7 @@ urlpatterns = [
     path('student/update/<int:id>/', studentview.student_update), path('classroom/', classview.classroom),
     path('classroom/update/<int:id>/', classview.classroom_update), path('grade/', gradeview.grade),
     path('grade/update/<int:id>/', gradeview.grade_update), path('grade/csv/', gradeview.add_through_csv),
-    path('subject/', subjectview.SSubject),
+    path('subject/', subjectview.subject),
     path('subject/update/<int:id>/', subjectview.subject_update), path('teacher/', teacherview.teacher),
     path('teacher/update/<int:id>/', teacherview.teacher_update), path('assigment/', assigmentsview.assignments),
     path('assigment/update/<int:id>', assigmentsview.assignments_update),

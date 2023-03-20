@@ -1,4 +1,4 @@
-from base.models import subject
+from base.models import Subject
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -8,7 +8,7 @@ from .serializers import SubjectSerializer
 
 
 @api_view(["GET", "POST", "DELETE"])
-def SSubject(request):
+def subject(request):
     if request.method == "GET":
 
         teacher = request.query_params.get("teacher", None)
@@ -16,18 +16,18 @@ def SSubject(request):
         classroom = request.query_params.get("classroom", None)
         subject_id = request.query_params.get("subject_id", None)
         if teacher:
-            subj = subject.objects.filter(teacher = teacher)
+            subj = Subject.objects.filter(teacher = teacher)
 
         elif onoma and classroom:
-            subj = subject.objects.filter(onoma = onoma, classroom = classroom)
+            subj = Subject.objects.filter(onoma = onoma, classroom = classroom)
 
         elif onoma:
-            subj = subject.objects.filter(onoma = onoma)
+            subj = Subject.objects.filter(onoma = onoma)
 
         elif subject_id:
-            subj = subject.objects.filter(subject_id = subject_id)
+            subj = Subject.objects.filter(subject_id = subject_id)
         else:
-            subj = subject.objects.all()
+            subj = Subject.objects.all()
 
         serializer = SubjectSerializer(subj, many = True)
         return Response(serializer.data)
@@ -43,7 +43,7 @@ def SSubject(request):
     elif request.user.role == 1 and request.method == "DELETE":
         subject_id = request.query_params.get("subject_id", None)
         try:
-            subj = subject.objects.get(subject_id = subject_id)
+            subj = Subject.objects.get(subject_id = subject_id)
             subj.delete()
             return JsonResponse({'message': ' Subject  deleted successfully!'}, status = status.HTTP_204_NO_CONTENT)
         except:
@@ -57,7 +57,7 @@ def SSubject(request):
 def subject_update(request, id):
     if request.user.role == 1:
 
-        subj = subject.objects.get(subject_id = id)
+        subj = Subject.objects.get(subject_id = id)
 
         if not subj:
             return JsonResponse({'message': 'Subject not found'}, status = status.HTTP_404_NOT_FOUND)

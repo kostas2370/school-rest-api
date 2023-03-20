@@ -1,4 +1,4 @@
-from base.models import Student, Teacher, Classroom, subject, Grades, Assignments, StudentAssigments, Announcements
+from base.models import Student, Teacher, Classroom, Subject, Grades, Assignments, StudentAssigments, Announcements
 from base.models import User
 from rest_framework import serializers
 
@@ -26,7 +26,7 @@ class SubjectSerializer(serializers.ModelSerializer):
     classroom = ClassroomSerializer()
 
     class Meta:
-        model = subject
+        model = Subject
         fields = "__all__"
 
 
@@ -52,7 +52,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class AssignmentsSerializer(serializers.ModelSerializer):
-    Subject = SubjectSerializer()
+    subject = SubjectSerializer()
     classroom = ClassroomSerializer()
     teacher = TeacherSerializer()
 

@@ -8,7 +8,7 @@ from rest_framework import status
 def get_role(request):
     try:
         return JsonResponse({"role": request.user.role}, status = status.HTTP_200_OK)
-    except exception:
+    except:
         return JsonResponse({'message': "You dont have permissions"}, status = status.HTTP_401_UNAUTHORIZED)
 
 

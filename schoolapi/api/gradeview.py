@@ -1,4 +1,4 @@
-from base.models import subject, Grades, Teacher, Student
+from base.models import Subject, Grades, Teacher, Student
 from rest_framework.response import Response
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
@@ -18,7 +18,7 @@ def grade(request):
             if classroom:
                 grades = Grades.objects.filter(classroom = classroom)
             elif student and subj:
-                grades = Grades.objects.filter(student = student, subject_name = Subject)
+                grades = Grades.objects.filter(student = student, subject_name = subj)
             elif subj:
                 grades = Grades.objects.filter(subject = subj)
             elif student:
@@ -83,12 +83,12 @@ def grade_update(request, id):
 @api_view(["POST"])
 def add_through_csv(request):
     data = request.data
-    subj = subject.objects.get(subject_id = data["subject_id"])
+    subj = Subject.objects.get(subject_id = data["subject_id"])
 
     if subj.teacher.user != request.user:
         return JsonResponse({"message": f"No permissions"}, status = status.HTTP_401_UNAUTHORIZED)
 
-    df = pd.read_excel(request.FILES["file"], nrows = 2)
+    df = pd.read_excel(request.FILES["file"])
     if list(df.columns) != ["ids", "grade"]:
         return JsonResponse({
                                 "message": "Wrong excel format , you need to have 2 headers titles ids for students "
@@ -97,7 +97,6 @@ def add_through_csv(request):
                             status = status.HTTP_400_BAD_REQUEST)
 
     for index, row in df.iterrows():
-
         id = row.get("ids")
         if not Student.objects.filter(student_id = row["ids"]).exists():
             return JsonResponse({"message": f"Student with id : {id} does not exists"},

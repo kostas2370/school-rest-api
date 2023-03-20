@@ -1,8 +1,8 @@
 from django.contrib import admin
 from .models import User
-from .models import Student,subject,Classroom,Teacher,Grades,Assignments,StudentAssigments,Announcements
+from .models import Student,Subject,Classroom,Teacher,Grades,Assignments,StudentAssigments,Announcements
 admin.site.register(Student)
-admin.site.register(subject)
+admin.site.register(Subject)
 admin.site.register(Classroom)
 admin.site.register(Teacher)
 admin.site.register(Grades)
