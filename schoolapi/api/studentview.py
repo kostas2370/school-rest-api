@@ -9,18 +9,18 @@ from .serializers import StudentSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def students(request):
+
     if request.method == "GET":
+
+        # Getting the request_query parameters
+        student_id = request.query_params.get("student_id", None)
+        classroom = request.query_params.get("classroom", None)
+
         if request.user.role == 1 or request.user.role == 2:
-
-            # Getting the request_query parameters
-            student_id = request.query_params.get("student_id", None)
-            classroom = request.query_params.get("classroom", None)
-
             # Filtering Data depending on our parameters
 
             if student_id:
                 students = Student.objects.filter(student_id = student_id)
-
             elif classroom:
                 students = Student.objects.filter(classroom = classroom)
             else:

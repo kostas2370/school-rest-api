@@ -52,7 +52,7 @@ def studentassigment(request):
         data = request.data
         assgn = Assignments.objects.get(id = int(data["assignment"]))
 
-        if (request.user.role == 3):
+        if request.user.role == 3:
             studt = Student.objects.get(user = request.user)
 
         else:
@@ -72,13 +72,13 @@ def studentassigment(request):
     elif request.method == "DELETE":
         id = request.query_params.get('id', None)
         stud = Student.objects.get(user = request.user)
-        if not (id) and not (StudentAssigments.objects.filter(id = id).exists()):
+        if not id and not (StudentAssigments.objects.filter(id = id).exists()):
             return JsonResponse({'message': "Couldn't find an stud assign with that id"},
                                 status = status.HTTP_400_BAD_REQUEST)
 
         assigment = StudentAssigments.objects.get(id = id)
 
-        if request.user.role == 1 or (equest.user.role == 3 and stud == assigment.student):
+        if request.user.role == 1 or (request.user.role == 3 and stud == assigment.student):
             assigment.delete()
             return JsonResponse({'message': ' assigment  deleted successfully!'}, status = status.HTTP_204_NO_CONTENT)
         else:

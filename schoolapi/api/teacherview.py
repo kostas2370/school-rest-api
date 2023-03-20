@@ -14,16 +14,16 @@ def teacher(request):
         teacher_id = request.query_params.get("teacher_id", None)
 
         if (request.user.role == 2):
-            teacher = Teacher.objects.filter(user = request.user)
+            teach = Teacher.objects.filter(user = request.user)
         elif first_name and last_name:
-            teacher = Teacher.objects.filter(first_name = first_name, last_name = last_name)
+            teach = Teacher.objects.filter(first_name = first_name, last_name = last_name)
 
         elif teacher_id:
-            teacher = Teacher.objects.filter(teacher_id = teacher_id)
+            teach = Teacher.objects.filter(teacher_id = teacher_id)
         else:
-            teacher = Teacher.objects.all()
+            teach = Teacher.objects.all()
 
-        serializer = TeacherSerializer(teacher, many = True)
+        serializer = TeacherSerializer(teach, many = True)
         return Response(serializer.data)
 
     elif request.method == "POST" and (request.user.role == 1 or request.user.role == 4):
@@ -36,15 +36,15 @@ def teacher(request):
         elif request.user.role == 1:
             new_user = User.objects.get(username = data["user"])
 
-        new_Teacher = Teacher.objects.create(user = new_user, first_name = data["first_name"],
+        new_teacher = Teacher.objects.create(user = new_user, first_name = data["first_name"],
                                              last_name = data["last_name"], phone = data["phone"],
                                              email = data["email"])
 
-        if new_Teacher:
-            new_Teacher.save()
+        if new_teacher:
+            new_teacher.save()
             new_user.save()
 
-        serializer = TeacherSerializer(new_Teacher)
+        serializer = TeacherSerializer(new_teacher)
         return Response(serializer.data)
 
     elif request.method == "DELETE":
@@ -70,19 +70,19 @@ def teacher_update(request, id=None):
 
     if request.user.role == 1:
 
-        teacher = Teacher.objects.get(teacher_id = id)
+        teach = Teacher.objects.get(teacher_id = id)
 
     elif request.user.role == 2:
-        teacher = Teacher.objects.get(user = request.user)
+        teach = Teacher.objects.get(user = request.user)
     else:
         return JsonResponse({'message': "You dont have authorasation"}, status = status.HTTP_401_UNAUTHORIZED)
 
     try:
-        teacher.first_name = data["first_name"]
-        teacher.last_name = data["last_name"]
-        teacher.phone = data["phone"]
-        teacher.email = data["email"]
-        teacher.save()
+        teach.first_name = data["first_name"]
+        teach.last_name = data["last_name"]
+        teach.phone = data["phone"]
+        teach.email = data["email"]
+        teach.save()
 
         return JsonResponse({'message': "Success"}, status = status.HTTP_201_CREATED)
 

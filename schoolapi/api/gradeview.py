@@ -2,26 +2,25 @@ from base.models import subject, Grades, Teacher, Student
 from rest_framework.response import Response
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-
 from .serializers import GradesSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 import pandas as pd
 
-
 @api_view(["GET"])
 def grade(request):
     if request.method == "GET":
+        student = request.query_params.get("student", None)
+        subj = request.query_params.get("subject_name", None)
+        classroom = request.query_params.get("classroom", None)
+
         if request.user.role == 1:
-            student = request.query_params.get("student", None)
-            Subject = request.query_params.get("subject", None)
-            classroom = request.query_params.get("classroom", None)
             if classroom:
                 grades = Grades.objects.filter(classroom = classroom)
-            elif student and Subject:
+            elif student and subj:
                 grades = Grades.objects.filter(student = student, subject_name = Subject)
-            elif Subject:
-                grades = Grades.objects.filter(subject = Subject)
+            elif subj:
+                grades = Grades.objects.filter(subject = subj)
             elif student:
                 grades = Grades.objects.filter(student = student)
 
@@ -30,18 +29,16 @@ def grade(request):
 
         elif request.user.role == 2:
             teacher = Teacher.objects.get(user = request.user)
-            student = request.query_params.get("student", None)
-            Subject = request.query_params.get("subject_name", None)
-            classroom = request.query_params.get("classroom", None)
+
             if student:
                 grades = Grades.objects.filter(teacher = teacher.teacher_id, student = student.student_id,
-                                               subject_name = Subject)
+                                               subject_name = subj)
 
             elif classroom:
                 grades = Grades.objects.filter(teacher = teacher.teacher_id, classroom = classroom,
-                                               subject_name = Subject)
+                                               subject_name = subj)
 
-            elif Subject:
+            elif subj:
                 grades = Grades.objects.filter(teacher = teacher.teacher_id, subject_name = Subject)
 
             else:
@@ -50,11 +47,8 @@ def grade(request):
         elif request.user.role == 3:
             global Student
             stud = Student.objects.get(user = request.user)
-
-            Subject = request.query_params.get("subject_name", None)
-            classroom = request.query_params.get("classroom", None)
-            if Subject:
-                grades = Grades.objects.filter(student = stud, subject_name = Subject)
+            if subj:
+                grades = Grades.objects.filter(student = stud, subject_name = subj)
             elif classroom:
                 grades = Grades.objects.filter(student = stud, classroom = classroom)
             else:

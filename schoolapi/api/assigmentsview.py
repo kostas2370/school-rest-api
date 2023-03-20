@@ -86,14 +86,14 @@ def assignments_update(request, id):
 
     try:
 
-        if (len(request.FILES) > 0):
+        if len(request.FILES) > 0:
             assigment.pdf_question = request.FILES["file"]
 
         assigment.deadline = data["deadline"]
         assigment.title = data["title"]
         assigment.question = data["question"]
-        Subject = subject.objects.get(subject_id = data["Subject"])
-        assigment.Subject = Subject
+        subj = subject.objects.get(subject_id = data["Subject"])
+        assigment.Subject = subj
         assigment.save()
         return JsonResponse({'message': ' assigment  updated successfully!'}, status = status.HTTP_201_CREATED)
 

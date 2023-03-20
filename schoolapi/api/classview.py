@@ -4,7 +4,7 @@ from rest_framework.parsers import JSONParser
 from base.models import Classroom
 from .serializers import ClassroomSerializer
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
 
 
 @api_view(['GET', 'POST', 'DELETE'])

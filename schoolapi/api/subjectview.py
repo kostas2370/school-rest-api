@@ -16,20 +16,20 @@ def SSubject(request):
         classroom = request.query_params.get("classroom", None)
         subject_id = request.query_params.get("subject_id", None)
         if teacher:
-            Subject = subject.objects.filter(teacher = teacher)
+            subj = subject.objects.filter(teacher = teacher)
 
         elif onoma and classroom:
-            Subject = subject.objects.filter(onoma = onoma, classroom = classroom)
+            subj = subject.objects.filter(onoma = onoma, classroom = classroom)
 
         elif onoma:
-            Subject = subject.objects.filter(onoma = onoma)
+            subj = subject.objects.filter(onoma = onoma)
 
         elif subject_id:
-            Subject = subject.objects.filter(subject_id = subject_id)
+            subj = subject.objects.filter(subject_id = subject_id)
         else:
-            Subject = subject.objects.all()
+            subj = subject.objects.all()
 
-        serializer = SubjectSerializer(Subject, many = True)
+        serializer = SubjectSerializer(subj, many = True)
         return Response(serializer.data)
 
     elif request.user.role == 1 and request.method != "POST":
@@ -43,8 +43,8 @@ def SSubject(request):
     elif request.user.role == 1 and request.method == "DELETE":
         subject_id = request.query_params.get("subject_id", None)
         try:
-            Subject = subject.objects.get(subject_id = subject_id)
-            Subject.delete()
+            subj = subject.objects.get(subject_id = subject_id)
+            subj.delete()
             return JsonResponse({'message': ' Subject  deleted successfully!'}, status = status.HTTP_204_NO_CONTENT)
         except:
             return JsonResponse({'message': 'Couldnts find Subject with that id'}, status = status.HTTP_404_NOT_FOUND)
@@ -59,7 +59,7 @@ def subject_update(request, id):
 
         subj = subject.objects.get(subject_id = id)
 
-        if subj == []:
+        if not subj:
             return JsonResponse({'message': 'Subject not found'}, status = status.HTTP_404_NOT_FOUND)
 
         data = JSONParser().parse(request)
