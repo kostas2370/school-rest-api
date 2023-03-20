@@ -122,5 +122,4 @@ def add_through_csv(request):
         grade = Grades.objects.create(student = stud, subject_name = subj, teacher = subj.teacher,
                                       classroom = subj.classroom, grade = row["grade"])
         grade.save()
-
     return JsonResponse({'message': ' Grades  added successfully!'}, status = status.HTTP_200_OK)
