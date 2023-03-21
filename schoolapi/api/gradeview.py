@@ -23,7 +23,6 @@ def grade(request):
                 grades = Grades.objects.filter(subject = subj)
             elif student:
                 grades = Grades.objects.filter(student = student)
-
             else:
                 grades = Grades.objects.all()
 
@@ -31,12 +30,10 @@ def grade(request):
             teacher = Teacher.objects.get(user = request.user)
 
             if student:
-                grades = Grades.objects.filter(teacher = teacher.teacher_id, student = student.student_id,
-                                               subject_name = subj)
+                grades = Grades.objects.filter(teacher = teacher.teacher_id, student = student)
 
             elif classroom:
-                grades = Grades.objects.filter(teacher = teacher.teacher_id, classroom = classroom,
-                                               subject_name = subj)
+                grades = Grades.objects.filter(teacher = teacher.teacher_id, classroom = classroom)
 
             elif subj:
                 grades = Grades.objects.filter(teacher = teacher.teacher_id, subject_name = Subject)
@@ -97,29 +94,29 @@ def add_through_csv(request):
                             status = status.HTTP_400_BAD_REQUEST)
 
     for index, row in df.iterrows():
-        id = row.get("ids")
+        ids = row.get("ids")
         if not Student.objects.filter(student_id = row["ids"]).exists():
-            return JsonResponse({"message": f"Student with id : {id} does not exists"},
+            return JsonResponse({"message": f"Student with id : {ids} does not exists"},
                                 status = status.HTTP_400_BAD_REQUEST)
 
-        stud = Student.objects.get(student_id = id)
+        stud = Student.objects.get(student_id = ids)
 
         if stud.classroom != subj.classroom:
-            return JsonResponse({"message": f"Student with id : {id} is not in the subject's classroom"},
+            return JsonResponse({"message": f"Student with id : {ids} is not in the subject's classroom"},
                                 status = status.HTTP_400_BAD_REQUEST)
 
         if Grades.objects.filter(student = stud, subject_name = subj).exists() and not pd.isna(row["grade"]):
 
-            grade = Grades.objects.get(student = stud, subject_name = subj)
-            grade.grade = row.get("grade")
-            grade.save()
+            grad = Grades.objects.get(student = stud, subject_name = subj)
+            grad.grade = row.get("grade")
+            grad.save()
 
             continue
 
         if pd.isna(row["grade"]):
             row["grade"] = 0
 
-        grade = Grades.objects.create(student = stud, subject_name = subj, teacher = subj.teacher,
+        grad = Grades.objects.create(student = stud, subject_name = subj, teacher = subj.teacher,
                                       classroom = subj.classroom, grade = row["grade"])
-        grade.save()
+        grad.save()
     return JsonResponse({'message': ' Grades  added successfully!'}, status = status.HTTP_200_OK)
