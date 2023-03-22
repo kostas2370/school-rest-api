@@ -1,6 +1,8 @@
 # School system Rest api
 
 **Endpoints :**
+
+
 *Students :*
 >api/student/ Methods = [GET,POST,DELETE]
 >
@@ -85,11 +87,48 @@ Json format :
 
 ```
 
+>api/teacher/ Methods = [GET,POST,DELETE]
+>
+>api/teacher/update/<int:id>/ Methods = [PUT]
+>
+>query_params = first_name , last_name , teacher_id
+>
+>For delete by id
 
 
+Json format :
+```json
+    {
+        "first_name": "Kostasa",
+        "last_name": "Damianos",
+        "phone": "692022012",
+        "email": "test@gmail.com",
+        "user": 2
+    }
+```
 
+>api/assigment/  Methods = [GET,POST,DELETE]
+>
+>apiassigment/update/<int:id>  Methods = [PUT]
+>
+>query_params = teacher(id), classroom(id), id , subject(id)
+>
+>for delete by id
 
-
+Json format :
+```json
+{
+        "id": 2,
+        "subject":1,
+        "pdf_question": "/media/assigments/asddasasqqwqwe.pdf",
+        "created": "2023-03-20",
+        "deadline": "2023-03-23",
+        "title": "MASTORILIKIA",
+        "question": "KANTE KATI RE ALANIA !"
+        "teacher": 3,
+        "classroom" :3       
+        },
+```
 
 
 
