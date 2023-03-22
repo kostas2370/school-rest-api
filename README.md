@@ -45,6 +45,34 @@ json format :
 ```
 
 
+>api/grade/ Methods = [GET,POST,DELETE]
+> 
+>api/grade/update/<int:id>/ Methods = [PUT]
+>
+>api/grade/csv/ Methods = [POST,PUT]
+>
+>query_params = student,classroom,subject_name(id)
+>
+>for delete by id
+
+```json
+{
+        "id": 1,  
+        "grade": 97,
+        "student": 1,
+        "subject_name" : 1,
+        "teacher" : 1,
+        "classroom" : 1
+  }   
+```
+
+
+
+
+
+
+
+
 
  
  
