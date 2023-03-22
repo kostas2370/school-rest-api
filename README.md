@@ -121,21 +121,57 @@ Json format :
         "id": 2,
         "subject":1,
         "pdf_question": "/media/assigments/asddasasqqwqwe.pdf",
-        "created": "2023-03-20",
         "deadline": "2023-03-23",
         "title": "MASTORILIKIA",
         "question": "KANTE KATI RE ALANIA !"
         "teacher": 3,
         "classroom" :3       
-        },
+}
 ```
+>api/student/assigment/ Methods = [POST,GET,DELETE]
+>
+>api/student/assigment/addgrade/<int:id>/ Methods = ["PUT"] (in put data you add the score and in the id the student assigment id)
+>
+>query_params = id,assigment,student
+>
+>for delete by id 
+    
+Json format :
+```json    
+    {
+        "id": 2,
+        "file": "/media/student_assigments/ffsddfs%CF%85.pdf",
+        "score": 77,
+        "student": 3,
+        "assignment": 3
+    }
+
+``` 
+
+>api/announcements/ Methods = [GET,POST,DELETE]
+>
+>api/announcement/update/<int:id> Methods = [PUT]
+>
+>query_args : id
 
 
+```json
 
+{
+        "id": 1,
+        "publisher": 1,
+        "title": "qqqq",
+        "content": "qqqq",
+        "image_post": "/media/post_images/PP.png",
+}
 
- 
- 
+```
         
+        
+>api/getrole/ Methods = [GET] It returns the role of the user logined 
+>
+>api/getusername/ Methods = [GET] It returns the username of the user
+
     
 
 
