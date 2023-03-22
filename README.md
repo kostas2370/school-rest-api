@@ -6,7 +6,7 @@
 >
 >api/student/<student_id>/ METHODS [PUT]
 >
->query_params : student_id,classroom_id
+>query_params : student_id,classroom
 for delete :by id
 
 json format :
@@ -24,6 +24,25 @@ json format :
         "user": 3
  }  
 ```
+
+>api/classroom/  Methods = [GET,POST,DELETE]
+>
+>api/classroom/<classroom_Id> Methods = [PUT]
+>query_params = id ,classname,class_number
+>for delete by id
+
+json format :
+```json
+    {
+        "id": 1,
+        "classname": "A",
+        "class_number": 1,
+        "maximum": 42,
+        "students_in": 3
+    }
+```
+
+
 
  
  
