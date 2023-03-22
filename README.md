@@ -5,8 +5,8 @@
 
 0. Everyone (Can get subjects , can get announcements , can get teachers
 1. School Manager (Have access in everything)
-2. Teacher ( Have access in their subjects , can add/edit announcements and assignments of their subjects 
-3. Student ( Have access only in their classroom subject and in their own assignments . 
+2. Teacher ( Have access in their subjects , can add/edit announcements and assignments of their subjects,can add grades in their subject and can grade the assignments of their subjects
+3. Student ( Have access only in their classroom subject and in their own assignments,grades etc . 
 
 
 **Endpoints :**
