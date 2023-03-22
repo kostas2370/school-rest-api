@@ -24,7 +24,7 @@ json format :
         "user": 3
  }  
 ```
-**Classroom**
+**Classroom :**
 >api/classroom/  Methods = [GET,POST,DELETE]
 >
 >api/classroom/<classroom_Id> Methods = [PUT]
@@ -44,7 +44,7 @@ json format :
     }
 ```
 
-**Grades**
+**Grades :**
 >api/grade/ Methods = [GET,POST,DELETE]
 > 
 >api/grade/update/<int:id>/ Methods = [PUT]
@@ -67,7 +67,7 @@ json format :
         "classroom" : 1
   }   
 ```
-##Subjects
+**Subjects :**
 >api/subject/ Methods = [GET,POST,DELETE]
 >
 >api/subject/update/<int:id>/ Methods = [PUT]
@@ -86,7 +86,7 @@ Json format :
  }
 
 ```
-**Teachers**
+**Teachers :**
 >api/teacher/ Methods = [GET,POST,DELETE]
 >
 >api/teacher/update/<int:id>/ Methods = [PUT]
@@ -106,7 +106,7 @@ Json format :
         "user": 2
     }
 ```
-**Assigments**
+**Assigments :**
 >api/assigment/  Methods = [GET,POST,DELETE]
 >
 >apiassigment/update/<int:id>  Methods = [PUT]
@@ -128,7 +128,7 @@ Json format :
         "classroom" :3       
 }
 ```
-**StudentAssigments**
+**StudentAssigments :**
 >api/student/assigment/ Methods = [POST,GET,DELETE]
 >
 >api/student/assigment/addgrade/<int:id>/ Methods = ["PUT"] (in put data you add the score and in the id the student assigment id)
@@ -148,7 +148,7 @@ Json format :
     }
 
 ``` 
-**Announcements**
+**Announcements :**
 >api/announcements/ Methods = [GET,POST,DELETE]
 >
 >api/announcement/update/<int:id> Methods = [PUT]
@@ -168,7 +168,7 @@ Json format :
 
 ```
         
- **Other** 
+ **Other :** 
 >api/getrole/ Methods = [GET] It returns the role of the user logined 
 >
 >api/getusername/ Methods = [GET] It returns the username of the user
