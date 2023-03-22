@@ -67,7 +67,7 @@ json format :
         "classroom" : 1
   }   
 ```
-**Subjects**
+##Subjects
 >api/subject/ Methods = [GET,POST,DELETE]
 >
 >api/subject/update/<int:id>/ Methods = [PUT]
