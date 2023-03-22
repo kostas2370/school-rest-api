@@ -28,7 +28,9 @@ json format :
 >api/classroom/  Methods = [GET,POST,DELETE]
 >
 >api/classroom/<classroom_Id> Methods = [PUT]
+>
 >query_params = id ,classname,class_number
+>
 >for delete by id
 
 json format :
