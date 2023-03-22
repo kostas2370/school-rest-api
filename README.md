@@ -10,6 +10,7 @@
 for delete :by id
 
 json format :
+```json
 {
         "student_id": 1,
         "classroom": 1,
@@ -22,6 +23,8 @@ json format :
         "apousies": 1,
         "user": 3
  }  
+```
+
  
  
         
