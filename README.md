@@ -1,4 +1,4 @@
-# school-rest-api
+# School system Rest api
 
 **Request Urls :**
 
