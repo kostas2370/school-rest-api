@@ -1,6 +1,6 @@
 # school-rest-api
 
-** Request Urls :**
+**Request Urls :**
 
 >api/student/ Methods = [GET,POST,DELETE]
 >api/student/<student_id>/ [PUT]
