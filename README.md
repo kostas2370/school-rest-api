@@ -5,6 +5,7 @@
 >api/student/ Methods = [GET,POST,DELETE]
 >
 >api/student/<student_id>/ [PUT]
+>
 query_params : student_id,classroom_id
 for delete :by id
 
