@@ -4,9 +4,9 @@
 
 >api/student/ Methods = [GET,POST,DELETE]
 >
->api/student/<student_id>/ [PUT]
+>api/student/<student_id>/ METHODS [PUT]
 >
-query_params : student_id,classroom_id
+>query_params : student_id,classroom_id
 for delete :by id
 
 json format :
