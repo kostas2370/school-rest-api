@@ -1,7 +1,7 @@
 # School system Rest api
 
-**Request Urls :**
-
+**Endpoints :**
+*Students :*
 >api/student/ Methods = [GET,POST,DELETE]
 >
 >api/student/<student_id>/ METHODS [PUT]
@@ -12,13 +12,11 @@ for delete :by id
 json format :
 ```json
 {
-        "student_id": 1,
         "classroom": 1,
         "first_name": "test",
         "last_name": "test",
         "phone": "6666666",
         "email": "test@gmail.com",
-        "created": "2023-03-19T01:03:10.289047Z",
         "photo": "/media/student_pics/default.png",
         "apousies": 1,
         "user": 3
@@ -51,6 +49,8 @@ json format :
 >
 >api/grade/csv/ Methods = [POST,PUT]
 >
+>(the csv file , subject_id)
+>
 >query_params = student,classroom,subject_name(id)
 >
 >for delete by id
@@ -65,6 +65,26 @@ json format :
         "classroom" : 1
   }   
 ```
+
+>api/subject/ Methods = [GET,POST,DELETE]
+>
+>api/subject/update/<int:id>/ Methods = [PUT]
+>
+>query_parms = teacher,classroom(id),onoma,subject_id
+>
+>for delete by id
+
+Json format :
+```json
+ {
+        "subject_id": 1,
+        "teacher": 1,
+        "classroom": 1,
+        "onoma": "Mathimatika"
+ }
+
+```
+
 
 
 
