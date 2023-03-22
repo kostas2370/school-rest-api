@@ -1,5 +1,14 @@
 # School system Rest api
 
+
+**Permissions :**
+
+0. Everyone (Can get subjects , can get announcements , can get teachers
+1. School Manager (Have access in everything)
+2. Teacher ( Have access in their subjects , can add/edit announcements and assignments of their subjects 
+3. Student ( Have access only in their classroom subject and in their own assignments . 
+
+
 **Endpoints :**
 
 
